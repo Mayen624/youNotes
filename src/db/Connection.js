@@ -1,35 +1,33 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
-class Connection {
-    
-    constructor() {
-        this.user = process.env.DB_user;
-        this.pass = process.env.DB_pass;
-        this.dbname = process.env.DB_name;
-        this.conn = null;
-    }
 
-    async connectDB() {
-        if(!this.conn){
-            let URI = "mongodb+srv://" + this.user + ":" + this.pass + "@younotes.lqxi7zf.mongodb.net/" + this.dbname + "?retryWrites=true&w=majority";
-            try{
-                this.conn = await  mongoose.connect(URI, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true });
-                console.log('**Conexión a la base de datos abierta**');
-            }catch(error){
-                console.log(error);
-            }
+const dbConnect = () => {
+
+    let URI = `mongodb+srv://${process.env.DB_user}:${process.env.DB_pass}@younotes.lqxi7zf.mongodb.net/${process.env.DB_name}?retryWrites=true&w=majority`;
+
+    mongoose.connect(URI, {
+        useUnifiedTopology: true,
+        useNewUrlParser: true
+    },(err,res) => {
+        if(!err){
+            console.log('***Successfuly connection***');
+        }else{
+            console.log(err);
         }
-
-        return this.conn;
-
-    }
-
-    closeDB() {
-        this.conn = null;
-        mongoose.disconnect().then(()=>{
-            console.log('**Conexión a la base de datos cerrada**');
-        });
-    }
+    });
 }
 
-module.exports = Connection;
+const dbDesconnect = () => {
+    mongoose.disconnect({
+
+    }, (err, res) => {
+        if(!err){
+            console.log('***Database closed***')
+        }else{
+            console.log(err)
+        }
+    })
+}
+
+
+module.exports = {dbConnect, dbDesconnect};

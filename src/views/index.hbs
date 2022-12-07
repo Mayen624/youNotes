@@ -1,4 +1,4 @@
-<div class="container mb-3">
+<div class="container">
     <div class="row justify-content-center" style="margin-top: 5rem;">
         <div class="col-ms-8 col-md-6 col-lg-4 rounded p-4 shadow" style="background-color: #F7F7F7;">
                 <div class="row justify-content-center mb-4">
@@ -6,10 +6,14 @@
                 </div>
             <form action="" method="POST">
                 <div class="mb-4">
-                    <label class="form-label">Correo:</label>
-                    <input name="email" type="email" class="form-control" placeholder="Ingrese su correo" id="email">
-                    <label class="form-label">Contraseña:</label>
-                    <input name="Password" type="password"  class="form-control" placeholder="Ingrese su contraseña" id="password">
+                    <div class="input-group flex-nowrap" style="margin: 10px;">
+                        <span class="input-group-text" id="addon-wrapping"><i class="bi bi-person-fill"></i></span>
+                        <input type="text" name="user" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping">
+                    </div>
+                    <div class="input-group flex-nowrap" style="margin: 10px;">
+                        <span class="input-group-text" id="addon-wrapping"><i class="bi bi-lock-fill"></i></i></span>
+                        <input type="text" name="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="addon-wrapping">
+                    </div>
                 </div>
                 <div class="mb-4">
                     <button type="submit" class="btn btn-dark w-100">Ingresar</button>
@@ -22,5 +26,3 @@
         </div>
     </div>
 </div>
-
-<br>

@@ -4,15 +4,16 @@
                 <div class="row justify-content-center mb-4">
                     <img class="img-fluid rounded-circle" src="/public/images/notepad.png" alt="logo" style="width: 10rem;">
                 </div>
-            <form action="" method="POST">
+            <form action="/" method="POST">
                 <div class="mb-4">
                     <div class="input-group flex-nowrap" style="margin: 10px;">
                         <span class="input-group-text" id="addon-wrapping"><i class="bi bi-person-fill"></i></span>
-                        <input type="text" name="user" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping">
+                        <input type="text" name="User" class="form-control" placeholder="User" aria-label="Username" maxlength="15" aria-describedby="addon-wrapping" value="{{User}}">
                     </div>
                     <div class="input-group flex-nowrap" style="margin: 10px;">
                         <span class="input-group-text" id="addon-wrapping"><i class="bi bi-lock-fill"></i></i></span>
-                        <input type="text" name="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="addon-wrapping">
+                        <input type="password" id="password" name="Password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="addon-wrapping">
+                        <button id="show-pass" type="button" class="input-group-text"><i class="bi bi-eye-fill"></i></button>
                     </div>
                 </div>
                 <div class="mb-4">

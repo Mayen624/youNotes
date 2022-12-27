@@ -34,7 +34,7 @@ const auth = async (req,res) => {
     if(authErrors.length > 0){
         res.render('../views/index', {authErrors, User});
     }else{
-        res.send('Auth successfuly!');
+        res.redirect('/notes');
     }
 
 }

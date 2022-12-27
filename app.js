@@ -25,6 +25,8 @@ app.engine('.hbs', exphbs.engine({
     extname: '.hbs'
 }));
 
+
+
 app.set('view engine', '.hbs');
 
 //Middlewares
@@ -53,15 +55,17 @@ app.use('/public', express.static(__dirname + '/src/public'));
 const indexRoutes = require('./src/routes/auth.routes');
 const signUpRoutes = require('./src/routes/signUp.routes');
 const staticRoutes = require('./src/routes/static.routes');
+const noteRoutes = require('./src/routes/notes.routes');
 
 //Using routes
 app.use('/', indexRoutes); 
 app.use('/about', staticRoutes); 
 app.use('/signup', signUpRoutes);
+app.use('/notes', noteRoutes);
 
 //Port listening...
-
-app.listen(app.get('PORT'), () => {
+const ip = '0.0.0.0';
+app.listen(app.get('PORT'), ip, () => {
     console.log('Server up on port:', app.get('PORT'));
     dbConnect();
 })

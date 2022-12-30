@@ -15,5 +15,12 @@ const newUserShemma = new Schema({
     timestamps: true
 });
 
+//Don't return the password when the data user is required.
+newUserShemma.set('toJSON', {
+    transform: (document, returnedObject) => {
+        delete returnedObject.password
+    }
+})
+
 
 module.exports = mongoose.model('Users', newUserShemma);

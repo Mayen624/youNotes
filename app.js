@@ -26,7 +26,6 @@ app.engine('.hbs', exphbs.engine({
 }));
 
 
-
 app.set('view engine', '.hbs');
 
 //Middlewares
@@ -58,7 +57,8 @@ const staticRoutes = require('./src/routes/static.routes');
 const noteRoutes = require('./src/routes/notes.routes');
 
 //Using routes
-app.use('/', indexRoutes); 
+//app.use('/', mainRoute); 
+app.use('/auth', indexRoutes); 
 app.use('/about', staticRoutes); 
 app.use('/signup', signUpRoutes);
 app.use('/notes', noteRoutes);

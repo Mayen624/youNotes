@@ -1,4 +1,6 @@
 const userShemma = require('../models/Users');
+const LocalStrategy = require('passport-local');
+const passport = require('passport');
 const mongoose = require('mongoose');
 const bycript = require('bcrypt');
 
@@ -17,9 +19,12 @@ const auth = async (req,res) => {
         authErrors.push({message:'Poravor ingrese un usuario y contraseña'});
     }else{
         //if User exist in db
-        let userResult = await userShemma.find({user: User});
+        let userResult = await userShemma.findOne({user: User});
+
+        console.log(userResult)
 
         //Auth validation
+
         if(userResult.length > 0){
             const passResult = await bycript.compare(Password, userResult[0].password)
             if(!passResult){
@@ -28,6 +33,17 @@ const auth = async (req,res) => {
         }else{
             authErrors.push({message: 'Usuario o contraseña incorrectos'})
         }
+
+        // if(userResult.length > 0){
+        //     const passResult = await bycript.compare(Password, userResult.password)
+        //     passport.use(new PassportLocal(async function(userame, password, done){
+        //         if(!passResult){
+        //             authErrors.push({message: 'Usuario o contraseña incorrectos'})
+        //         }
+        //     }))
+        // }else{
+        //     authErrors.push({message: 'Usuario o contraseña incorrectos'})
+        // }
     }
 
     //If exist any error

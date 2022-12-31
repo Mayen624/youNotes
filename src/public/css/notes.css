@@ -33,3 +33,13 @@
     margin: 30px 30px 30px 30px;
     grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
 }
+
+.card-footer{
+    display: flex;
+    justify-content: space-between;
+}
+
+#btn-favorite{
+    border: none;
+    border-radius: 30px;
+}

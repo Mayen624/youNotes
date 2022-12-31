@@ -24,15 +24,7 @@ const auth = async (req,res) => {
         console.log(userResult)
 
         //Auth validation
-
-        if(userResult.length > 0){
-            const passResult = await bycript.compare(Password, userResult[0].password)
-            if(!passResult){
-                authErrors.push({message: 'Usuario o contraseña incorrectos'})
-            }
-        }else{
-            authErrors.push({message: 'Usuario o contraseña incorrectos'})
-        }
+        
 
         // if(userResult.length > 0){
         //     const passResult = await bycript.compare(Password, userResult.password)
@@ -50,7 +42,7 @@ const auth = async (req,res) => {
     if(authErrors.length > 0){
         res.render('../views/index', {authErrors, User});
     }else{
-        res.redirect('/notes');
+        res.redirect('/notes')
     }
 
 }

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const bycrypt = require('bcrypt');
-const {Schema} = mongoose;
+const {Schema, model} = mongoose;
 
 const newUserShemma = new Schema({
     user    : {type: String, unique: true, require: true},
@@ -15,12 +15,15 @@ const newUserShemma = new Schema({
     timestamps: true
 });
 
-//Don't return the password when the data user is required.
-newUserShemma.set('toJSON', {
-    transform: (document, returnedObject) => {
-        delete returnedObject.password
-    }
-})
+
+newUserShemma.methods.encryptPassword = async password => {
+    const salt = await bycrypt.genSalt(10);
+    return await bycrypt.hash(password, salt);
+},
+
+newUserShemma.methods.matchPassword = async function (pass){
+    return await bycrypt.compare(pass, this.password);
+}
 
 
-module.exports = mongoose.model('Users', newUserShemma);
+module.exports = model('Users', newUserShemma);

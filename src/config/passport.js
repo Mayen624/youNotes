@@ -15,8 +15,6 @@ passport.use(new LocalStrategy({
             return done(null, false, {message: 'Usuario no encontrado.'});
         }else{
             const match = await user.matchPassword(password);
-
-            //console.log(user.password)
             
             if(!match){
                 return done(null, false, {message: 'Contraseña incorrecta.'});

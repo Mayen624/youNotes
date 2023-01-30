@@ -5,4 +5,6 @@ const routes = Router();
 
 routes.get('/', notesController.notesRender);
 
+routes.get('/logout', notesController.logout);
+
 module.exports = routes;

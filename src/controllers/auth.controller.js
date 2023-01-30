@@ -11,4 +11,6 @@ const auth = passport.authenticate('local', {
     failureFlash: true
 })
 
+
+
 module.exports = {renderIndexForm, auth}

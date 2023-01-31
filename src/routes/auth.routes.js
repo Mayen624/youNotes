@@ -10,6 +10,6 @@ router.get('/', indexController.renderIndexForm);
 //User Auth
 router.post('/', indexController.auth);
 
-//req post - login
+router.get('/logout', indexController.logout);
 
 module.exports = router;

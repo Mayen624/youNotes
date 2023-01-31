@@ -70,8 +70,8 @@ app.use('/signup', signUpRoutes);
 app.use('/notes', noteRoutes);
 
 //Port listening...
-const ip = '0.0.0.0';
-app.listen(app.get('PORT'), ip, () => {
+//const ip = '0.0.0.0';
+app.listen(app.get('PORT'), () => {
     console.log('Server up on port:', app.get('PORT'));
     dbConnect();
 })

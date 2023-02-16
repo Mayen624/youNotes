@@ -1,3 +1,14 @@
+{{#if error}}
+<div id="alerts" style="margin: 0px 20px 0px 20px;">
+    <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show mt-3 mb-0" role="alert">
+        <i class="bi bi-exclamation-triangle-fill"></i>&nbsp;&nbsp;
+        <div>
+           {{error}}
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</div>
+{{/if}}
 
 <div class="box mt-4">
   <div class="divisor">
@@ -6,19 +17,19 @@
       <form class="d-flex" role="search">
         <div class="input-group">
           <input class="form-control me-2" type="search" placeholder="Buscar..." aria-label="Search">
-          <button class="input-group-text"><i class="bi bi-search"></i></button>
+          <button id="btn-search" class="input-group-text"><i class="bi bi-search"></i></button>
         </div>
       </form>
     </div>
 
     <div class="addNote">
-        <button class="btn btn-success">Nueva nota <i class="bi bi-plus"></i></button>
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNote">
+          Nueva nota <i class="bi bi-plus"></i>
+        </button>
     </div>
 
   </div>
 </div>
-
-<h1 class="text-center">{{req.session.user}}</h1>
 
 <div class="notes">
 

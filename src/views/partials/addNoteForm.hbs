@@ -1,0 +1,37 @@
+<!-- Modal -->
+<div class="modal fade" id="addNote" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Agregar nueva nota</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form action="/notes/add" method="POST">
+            <div class="mb-3">
+                <label class="form-label">Titulo:</i></label>
+                <input type="text" name="tittle" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Categoria:</i></label>
+                <select class="form-select" name="category">
+                  <option value="" selected></option>
+                  <option value="Recordatorio">Recordatorio</option>
+                  <option value="Negocios">Negocios</option>
+                  <option value="Credenciales">Credenciales</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Contenido:</i></label>
+                <textarea name="content" class="form-control"></textarea>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-primary">Añadir</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>

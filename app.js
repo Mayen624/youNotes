@@ -13,7 +13,7 @@ require('./src/config/passport');
 
 //Config
 dotenv.config(); // Allow use files .env
-app.use(morgan('dev')); // Allow to show method http, status codes http and time on console during server is up
+app.use(morgan('dev')); // Allow to show method http, status codes http and time in console during server is up
 app.use(express.urlencoded({extended: false}));
 
 app.set('PORT', process.env.PORT || 5000);

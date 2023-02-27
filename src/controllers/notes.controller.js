@@ -1,15 +1,15 @@
+const {format} = require('date-fns');
 const noteshemma = require('../models/Notes');
 const categoryShemma = require('../models/Categories');
 
+let currentDate = new Date();
+
 const notesRender = async (req,res) => {
-    const userInfo = req.user;
-    res.render('../views/layouts/notes', {layout: 'notes.hbs', userName: userInfo.user});
-    console.log(userInfo)
+    const userInfo = req.user; //All the data about user
+    const notes = await noteshemma.find({id_user: userInfo._id}) //Notes of user
+    res.render('../views/layouts/notes', {layout: 'notes.hbs', notes, userName: userInfo.user});
 }
 
-// const addNotesForm = async (req, res) => {
-//     // res.render('../views/')
-// }
 
 const addNote = async (req,res) => {
 

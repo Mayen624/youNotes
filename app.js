@@ -20,7 +20,7 @@ app.set('PORT', process.env.PORT || 5000);
 
 // View engine config
 app.set('views', path.join(__dirname, 'src/views')) //  get the view dir 
-app.engine('.hbs', exphbs.engine({
+app.engine('.hbs', exphbs({
     layoutsDir: path.join(app.get('views'), '/layouts'),
     partialsDir: path.join(app.get('views'), '/partials'),
     defaultLayout: 'main',

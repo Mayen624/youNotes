@@ -43,196 +43,45 @@
   </div>
 </div>
 
-<div class="notes">
 
-  <div class="card">
-    <div id="tittle-divisor" class="card-header">
-      <div class="tittle">
-        <p class="tittle-text fw-bold">TITULO DE LA TARJETA CON MAS TEXTO</p>
-      </div>
-      <div class="actions">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item dropdown">
-            <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="true">
-              <i style="font-size: 18px;" class="bi bi-sliders"></i>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
-                <li><a class="dropdown-item" href="#"><i class="bi bi-pencil-square"></i> Editar</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#"><i class="bi bi-trash-fill"></i> Eliminar</a></li>
+{{#if notes}}
+  <div class="notes">
+   {{#each notes}}
+      <div class="card">
+        <div id="tittle-divisor" class="card-header">
+          <div class="tittle">
+            <p class="tittle-text fw-bold">{{this.titulo}}</p>
+          </div>
+          <div class="actions">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item dropdown">
+                <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="true">
+                  <i style="font-size: 18px;" class="bi bi-sliders"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+                  <li><a class="dropdown-item" href="#"><i class="bi bi-pencil-square"></i> Editar</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#"><i class="bi bi-trash-fill"></i> Eliminar</a></li>
+                </ul>
+              </li>
             </ul>
-          </li>
-        </ul>
+          </div>
+        </div>
+        <div class="card-body">
+          <h5>{{this.categoria}}:</h5>
+          <p class="card-text">
+            {{this.contenido}}
+          </p>
+        </div>
+        <div class="card-footer">
+          <div class="date-card">
+            {{this.createdAt}}
+          </div>
+          <div class="favorite-button">
+            <button id="btn-favorite"><i class="bi bi-star"></i></button>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="card-body">
-      <h5>Categoria:</h5>
-      <p class="card-text">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
-        Neque consequuntur aliquam eaque voluptatibus quod porro culpa. 
-        Quaerat assumenda ut nemo ipsam culpa.
-      </p>
-    </div>
-    <div class="card-footer">
-      <div class="date-card">
-        30/12/2022
-      </div>
-      <div class="favorite-button">
-        <button id="btn-favorite"><i class="bi bi-star"></i></button>
-      </div>
-    </div>
+    {{/each}}
   </div>
-
-  <div class="card">
-    <div id="tittle-divisor" class="card-header">
-      <div class="tittle">
-        <p class="tittle-text fw-bold">TITULO DE LA TARJETA CON MAS TEXTO</p>
-      </div>
-      <div class="actions">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item dropdown">
-            <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="true">
-              <i style="font-size: 18px;" class="bi bi-sliders"></i>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
-                <li><a class="dropdown-item" href="#"><i class="bi bi-pencil-square"></i> Editar</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#"><i class="bi bi-trash-fill"></i> Eliminar</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="card-body">
-      <h5>Categoria:</h5>
-      <p class="card-text">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
-        Neque consequuntur aliquam eaque voluptatibus quod porro culpa. 
-        Quaerat assumenda ut nemo ipsam culpa.
-      </p>
-    </div>
-    <div class="card-footer">
-      <div class="date-card">
-        30/12/2022
-      </div>
-      <div class="favorite-button">
-        <button id="btn-favorite"><i class="bi bi-star"></i></button>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div id="tittle-divisor" class="card-header">
-      <div class="tittle">
-        <p class="tittle-text fw-bold">TITULO DE LA TARJETA CON MAS TEXTO</p>
-      </div>
-      <div class="actions">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item dropdown">
-            <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="true">
-              <i style="font-size: 18px;" class="bi bi-sliders"></i>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
-                <li><a class="dropdown-item" href="#"><i class="bi bi-pencil-square"></i> Editar</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#"><i class="bi bi-trash-fill"></i> Eliminar</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="card-body">
-      <h5>Categoria:</h5>
-      <p class="card-text">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
-        Neque consequuntur aliquam eaque voluptatibus quod porro culpa. 
-        Quaerat assumenda ut nemo ipsam culpa.
-      </p>
-    </div>
-    <div class="card-footer">
-      <div class="date-card">
-        30/12/2022
-      </div>
-      <div class="favorite-button">
-        <button id="btn-favorite"><i class="bi bi-star"></i></button>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div id="tittle-divisor" class="card-header">
-      <div class="tittle">
-        <p class="tittle-text fw-bold">TITULO DE LA TARJETA CON MAS TEXTO</p>
-      </div>
-      <div class="actions">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item dropdown">
-            <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="true">
-              <i style="font-size: 18px;" class="bi bi-sliders"></i>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
-                <li><a class="dropdown-item" href="#"><i class="bi bi-pencil-square"></i> Editar</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#"><i class="bi bi-trash-fill"></i> Eliminar</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="card-body">
-      <h5>Categoria:</h5>
-      <p class="card-text">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
-        Neque consequuntur aliquam eaque voluptatibus quod porro culpa. 
-        Quaerat assumenda ut nemo ipsam culpa.
-      </p>
-    </div>
-    <div class="card-footer">
-      <div class="date-card">
-        30/12/2022
-      </div>
-      <div class="favorite-button">
-        <button id="btn-favorite"><i class="bi bi-star"></i></button>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div id="tittle-divisor" class="card-header">
-      <div class="tittle">
-        <p class="tittle-text fw-bold">TITULO DE LA TARJETA CON MAS TEXTO</p>
-      </div>
-      <div class="actions">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item dropdown">
-            <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="true">
-              <i style="font-size: 18px;" class="bi bi-sliders"></i>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
-                <li><a class="dropdown-item" href="#"><i class="bi bi-pencil-square"></i> Editar</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#"><i class="bi bi-trash-fill"></i> Eliminar</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="card-body">
-      <h5>Categoria:</h5>
-      <p class="card-text">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
-        Neque consequuntur aliquam eaque voluptatibus quod porro culpa. 
-        Quaerat assumenda ut nemo ipsam culpa.
-      </p>
-    </div>
-    <div class="card-footer">
-      <div class="date-card">
-        30/12/2022
-      </div>
-      <div class="favorite-button">
-        <button id="btn-favorite"><i class="bi bi-star"></i></button>
-      </div>
-    </div>
-  </div>
-
-</div>
+{{/if}}

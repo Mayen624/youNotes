@@ -26,9 +26,9 @@
   <div class="divisor">
 
     <div class="container-fluid" style="">
-      <form class="d-flex" role="search">
+      <form class="d-flex" action="/notes?" method="GET">
         <div class="input-group">
-          <input class="form-control me-2" type="search" placeholder="Buscar..." aria-label="Search">
+          <input class="form-control me-2" name="filtro" placeholder="Buscar por titulo de nota..." aria-label="Search">
           <button id="btn-search" class="input-group-text"><i class="bi bi-search"></i></button>
         </div>
       </form>
@@ -59,9 +59,9 @@
                   <i style="font-size: 18px;" class="bi bi-sliders"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
-                  <li><a class="dropdown-item" href="#"><i class="bi bi-pencil-square"></i> Editar</a></li>
+                  <li><a class="dropdown-item" href="/notes/edit/{{this._id}}"><i class="bi bi-pencil-square"></i> Editar</a></li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#"><i class="bi bi-trash-fill"></i> Eliminar</a></li>
+                  <li><a class="dropdown-item" href="/notes/delete/{{this._id}}"><i class="bi bi-trash-fill"></i> Eliminar</a></li>
                 </ul>
               </li>
             </ul>

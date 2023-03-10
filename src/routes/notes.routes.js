@@ -8,6 +8,12 @@ routes.get('/',isAuthenticated, notesController.notesRender);
 
 routes.post('/add', isAuthenticated, notesController.addNote);
 
+routes.get('/edit/:id', isAuthenticated , notesController.editNotesForm);
+
+routes.post('/edit', isAuthenticated , notesController.editNotes)
+
+routes.delete('/delete/:id', notesController.deleteNotes);
+
 routes.get('/logout', notesController.logout);
 
 module.exports = routes;

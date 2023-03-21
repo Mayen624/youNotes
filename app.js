@@ -52,6 +52,14 @@ app.use((req,res,next) => {
     next();
 })
 
+//Page 404
+// app.get('*', (req, res) => {
+//     res.render('layouts/404', {
+//         error_msg: 'Not Found',
+//         description: 'Lo sentimos, ha ocurrido un error, pagina no encontrada!'
+//     })
+// })
+
 //Static files
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js'));
@@ -63,6 +71,7 @@ const indexRoutes = require('./src/routes/auth.routes');
 const signUpRoutes = require('./src/routes/signUp.routes');
 const staticRoutes = require('./src/routes/static.routes');
 const noteRoutes = require('./src/routes/notes.routes');
+const { dirname } = require('path');
 
 //Using routes
 //app.use('/', mainRoute); 
@@ -70,6 +79,22 @@ app.use('/auth', indexRoutes);
 app.use('/about', staticRoutes); 
 app.use('/signup', signUpRoutes);
 app.use('/notes', noteRoutes);
+
+// Middleware 404 para manejar errores de rutas no encontradas
+app.use((req, res, next) => {
+    const error = new Error('Not Found');
+    error.status = 404;
+    next(error);
+});
+  
+  // Middleware de manejo de errores para manejar cualquier otro error
+app.use((error, req, res, next) => {
+    res.status(error.status || 500);
+    res.render(app.get('views') + '/layouts/404', {
+        error_msg: 'Not Found',
+        description: 'Lo sentimos, ha ocurrido un error, pagina no encontrada!'
+    });
+});
 
 //Port listening...
 //const ip = '0.0.0.0';

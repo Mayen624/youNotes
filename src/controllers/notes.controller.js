@@ -5,9 +5,18 @@ const categoryShemma = require('../models/Categories');
 let currentDate = new Date(); //Current date
 
 const notesRender = async (req,res) => {
-    const {filtro} = req.params; // Filter all notes by user id or id category
+    
+    let filter = {};
+    const {filtro} = req.query; // Filter all notes by user id or id category
     const userInfo = req.user; //All the data about user
-    const notes = await noteshemma.find({$or: [{id_user: userInfo._id}, {categoria: filtro}]}) //Notes of user
+    
+    if(filtro){
+        filter = { id_user: userInfo._id, categoria: filtro };
+    }else{
+        filter = { id_user: userInfo._id };
+    }
+
+    const notes = await noteshemma.find(filter); //Notes of user
     res.render('../views/layouts/notes', {layout: 'notes.hbs', notes, userName: userInfo.user});
 }
 
@@ -87,7 +96,7 @@ const deleteNotes = async (req,res) => {
 
 const logout = async (req,res) => {
     req.logout();
-    req.flash('success_msg', 'session cerada.');
+    req.flash('success_msg', 'sesion cerada.');
     res.redirect('/auth');
 }
 

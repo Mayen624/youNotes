@@ -1,33 +1,32 @@
 <header>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/notes">You Notes</a>
-            <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse" id="navbarColor02" style="">
-                <ul class="navbar-nav me-auto text-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/about">About</a>
-                    </li>
-                </ul>
-                <form id="res" class="d-flex" style="width: auto;">
-                   <ul id="responsive-menu" class="navbar-nav w-100 text-center justify-content-center m-1">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                                <i class="bi bi-person-square"></i> {{userName}}
-                            </a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item text-center" href="#"><i class="bi bi-person-circle"></i> Perfil</a>
-                                <hr>
-                                <a class="dropdown-item text-center" href="#"><i class="bi bi-gear-fill"></i> Preferencias</a>
-                                <hr>
-                                <a class="dropdown-item text-center" href="/auth/logout"><i class="bi bi-power" style="font-size: 18px;"></i> Salir</a>
-                            </div>
-                        </li>
+    <nav class="navbar navbar-expand-lg navbar-dark p-2 bg-dark" style="padding-left:50px; padding-right: 50px;">
+        <a class="navbar-brand" href="/notes">You Notes</a>
+        <button class="navbar-toggler"type="button"data-bs-toggle="collapse"data-bs-target="#navbarNav"aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul id="centerIsResponsive" class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+            </ul>
+            <ul id="centerIsResponsive" class="navbar-nav ms-auto">
+                <li class="nav-item dropdown">
+                    <a
+                        class="nav-link dropdown-toggle"
+                        href="#"
+                        id="navbarDropdownMenuLink"
+                        role="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
+                        <i class="bi bi-person-square text-white"></i> {{userName}}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item text-center " href="/auth/logout"><i class="bi bi-power" style="font-size: 18px;"></i> Salir</a>
                     </ul>
-                </form>
-            </div>
+                </li>
+            </ul>
         </div>
     </nav>
 </header>

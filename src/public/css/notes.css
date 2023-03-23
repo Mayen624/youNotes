@@ -1,5 +1,5 @@
 body{
-    overflow: hidden;
+    
 }
 
 #tittle-divisor{
@@ -33,9 +33,18 @@ body{
 .notes{
     gap: 1rem;
     display: grid;
-    grid-auto-rows: 22rem;
+    grid-auto-rows: 25rem;
     margin: 30px 20px 30px 20px;
     grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+}
+
+.card-body{
+    overflow:scroll;
+    overflow-x: hidden;
+}
+
+#note-content{
+    white-space: pre-line;
 }
 
 .card-footer{
@@ -54,7 +63,7 @@ body{
       width: 100%;
     }
 
-    body{
-        overflow: visible;
+    #plus-icon{
+        display: none;
     }
 }

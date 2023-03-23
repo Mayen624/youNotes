@@ -27,7 +27,6 @@ app.engine('.hbs', exphbs({
     extname: '.hbs'
 }));
 
-
 app.set('view engine', '.hbs');
 
 //Middlewares
@@ -51,14 +50,6 @@ app.use((req,res,next) => {
     res.locals.user = req.user || null;
     next();
 })
-
-//Page 404
-// app.get('*', (req, res) => {
-//     res.render('layouts/404', {
-//         error_msg: 'Not Found',
-//         description: 'Lo sentimos, ha ocurrido un error, pagina no encontrada!'
-//     })
-// })
 
 //Static files
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));

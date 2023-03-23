@@ -36,7 +36,7 @@
 
     <div class="addNote">
         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNote">
-          Nueva nota <i class="bi bi-plus"></i>
+          Nueva nota <i id="plus-icon" class="bi bi-plus"></i>
         </button>
     </div>
 
@@ -69,8 +69,8 @@
         </div>
         <div class="card-body">
           <h5>{{this.categoria}}:</h5>
-          <p class="card-text">
-            {{this.contenido}}
+          <p id="note-content" class="card-text">
+            {{{this.contenido}}}
           </p>
         </div>
         <div class="card-footer">

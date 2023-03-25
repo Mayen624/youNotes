@@ -55,7 +55,7 @@
           <div class="actions">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item dropdown">
-                <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="true">
+                <a class="nav-link" role="button" data-bs-toggle="dropdown" title="Opciones" aria-expanded="true">
                   <i style="font-size: 18px;" class="bi bi-sliders"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
@@ -70,7 +70,7 @@
         <div class="card-body">
           <h5>{{this.categoria}}:</h5>
           <p id="note-content" class="card-text">
-            {{{this.contenido}}}
+            {{this.contenido}}
           </p>
         </div>
         <div class="card-footer">
@@ -78,7 +78,7 @@
             {{this.createdAt}}
           </div>
           <div class="favorite-button">
-            <button id="btn-favorite"><i class="bi bi-star"></i></button>
+            <button id="btn-favorite"><i class="bi bi-bell" title="Recuerdame"></i></button>
           </div>
         </div>
       </div>

@@ -36,6 +36,7 @@ app.use(session({
     cookie: {_expires: 3600000},
     saveUninitialized: true
 }))
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash()); 
@@ -62,7 +63,6 @@ const indexRoutes = require('./src/routes/auth.routes');
 const signUpRoutes = require('./src/routes/signUp.routes');
 const staticRoutes = require('./src/routes/static.routes');
 const noteRoutes = require('./src/routes/notes.routes');
-const { dirname } = require('path');
 
 //Using routes
 //app.use('/', mainRoute); 
@@ -78,7 +78,7 @@ app.use((req, res, next) => {
     next(error);
 });
   
-  // Middleware de manejo de errores para manejar cualquier otro error
+// Middleware de manejo de errores para manejar cualquier otro error
 app.use((error, req, res, next) => {
     res.status(error.status || 500);
     res.render(app.get('views') + '/layouts/404', {

@@ -7,7 +7,7 @@ let currentDate = new Date(); //Current date
 const notesRender = async (req,res) => {
     
     let filter = {};
-    const {filtro} = req.query; // Filter all notes by user id or id category
+    const {filtro} = req.query; // Filter all notes by user id or category
     const userInfo = req.user; //All the data about user
     
     if(filtro){
@@ -33,7 +33,7 @@ const addNote = async (req,res) => {
     if(error.length > 0){
         res.render('../views/layouts/notes', {layout: 'notes.hbs', error});
     }else{
-        //it have to save the id, tittle etc...
+        
         try {
 
             const newNote = new noteshemma({

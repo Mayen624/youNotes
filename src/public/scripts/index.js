@@ -1,5 +1,3 @@
-console.log('it works');
-
 const btnShowPass = document.getElementById('show-pass');
 btnShowPass.style.display = 'none';
 const inputPass = document.getElementById("password");

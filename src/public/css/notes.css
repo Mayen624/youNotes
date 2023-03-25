@@ -6,6 +6,9 @@ body{
     display: flex;
     justify-content: space-between;
 }
+#centerIsResponsive {
+    text-align: right;
+  }
 
 .divisor{
     display: flex;
@@ -61,6 +64,10 @@ body{
     #centerIsResponsive {
       text-align: center;
       width: 100%;
+    }
+
+    #centerText{
+        text-align: center;
     }
 
     #plus-icon{

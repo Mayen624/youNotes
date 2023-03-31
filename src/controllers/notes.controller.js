@@ -1,5 +1,6 @@
 const {format} = require('date-fns');
 const noteshemma = require('../models/Notes');
+const bcrypt = require('bcrypt');
 const categoryShemma = require('../models/Categories');
 
 let currentDate = new Date(); //Current date
@@ -8,10 +9,11 @@ const notesRender = async (req,res) => {
     
     let filter = {};
     const {filtro} = req.query; // Filter all notes by user id or category
-    const userInfo = req.user; //All the data about user
+    const userInfo = req.user; //All the data about user.
     
     if(filtro){
-        filter = { id_user: userInfo._id, categoria: filtro };
+        const upperCaseFilter = filtro.toUpperCase();
+        filter = { id_user: userInfo._id, categoria: upperCaseFilter };
     }else{
         filter = { id_user: userInfo._id };
     }
@@ -24,35 +26,62 @@ const notesRender = async (req,res) => {
 const addNote = async (req,res) => {
 
     const {tittle, category, content} = req.body;
+    const allowedCategories = ['Recordatorio', 'Negocios', 'Credenciales', 'Trabajo'];
     const error = [];
 
     if(tittle == "" || category == "" || content == ""){
         error.push('Todos los datos son requeridos.')
     }
 
+    if(!allowedCategories.includes(category)){
+        error.push('Categoria no permitida.')
+    }
+
     if(error.length > 0){
         res.render('../views/layouts/notes', {layout: 'notes.hbs', error});
     }else{
         
-        try {
+        // if(category == 'recordatorio' || category == 'Recordatorio'){
+        //     const newNote = new noteshemma({
+        //         id_user: req.user._id,
+        //         titulo: tittle,
+        //         categoria: category.toUpperCase(),
+        //         contenido: bcrypt.hash(content, 10),
+        //         createdAt: format(currentDate, 'dd/MM/yyyy'),
+        //         updatedAt: format(currentDate, 'dd/MM/yyyy')
+        //     })
 
-            const newNote = new noteshemma({
-                id_user: req.user._id,
-                titulo: tittle,
-                categoria: category,
-                contenido: content,
-                createdAt: format(currentDate, 'dd/MM/yyyy'),
-                updatedAt: format(currentDate, 'dd/MM/yyyy')
-            })
-    
-            await newNote.save();
-            req.flash("success_msg", "Nueva nota añadida.");
-            res.redirect('/notes');
+        //     await newNote.save();
+        //     req.flash("success_msg", "Nueva nota añadida.");
+        //     res.redirect('/notes');
 
-        } catch (e) {
-            req.flash("error_msg", "Ha ocurrido un error inesperado, porfavor intentalo denuevo.");
-            res.redirect('/notes');
-        }
+        // }else{
+        //     const newNote = new noteshemma({
+        //         id_user: req.user._id,
+        //         titulo: tittle,
+        //         categoria: category.toUpperCase(),
+        //         contenido: content,
+        //         createdAt: format(currentDate, 'dd/MM/yyyy'),
+        //         updatedAt: format(currentDate, 'dd/MM/yyyy')
+        //     })
+
+        //     await newNote.save();
+        //     req.flash("success_msg", "Nueva nota añadida.");
+        //     res.redirect('/notes');
+        // }
+
+        const newNote = new noteshemma({
+            id_user: req.user._id,
+            titulo: tittle,
+            categoria: category.toUpperCase(),
+            contenido: content,
+            createdAt: format(currentDate, 'dd/MM/yyyy'),
+            updatedAt: format(currentDate, 'dd/MM/yyyy')
+        })
+
+        await newNote.save();
+        req.flash("success_msg", "Nueva nota añadida.");
+        res.redirect('/notes');
     }
 }
 
@@ -83,12 +112,13 @@ const editNotes = async (req,res) => {
         const userInfo = req.user; //All the data about user
         res.render('../views/partials/editNotesForm', {layout: 'edit.hbs', noteData, userName: userInfo.user, errors})
     }else{
-        await noteshemma.findByIdAndUpdate(id,{titulo: tittle, categoria: category, contenido: content, updatedAt: format(currentDate, 'dd/MM/yyyy')})
+        await noteshemma.findByIdAndUpdate(id,{titulo: tittle, categoria: category.toUpperCase(), contenido: content, updatedAt: format(currentDate, 'dd/MM/yyyy')})
         req.flash('success_msg', 'Nota actualizada.')
         res.redirect('/notes');
     }
 
 }
+    
 
 const deleteNotes = async (req,res) => {
     const {} = req.body;

@@ -63,6 +63,7 @@ const indexRoutes = require('./src/routes/auth.routes');
 const signUpRoutes = require('./src/routes/signUp.routes');
 const staticRoutes = require('./src/routes/static.routes');
 const noteRoutes = require('./src/routes/notes.routes');
+const profileRoutes = require('./src/routes/profile.routes');
 
 //Using routes
 //app.use('/', mainRoute); 
@@ -70,6 +71,7 @@ app.use('/auth', indexRoutes);
 app.use('/about', staticRoutes); 
 app.use('/signup', signUpRoutes);
 app.use('/notes', noteRoutes);
+app.use('/profile', profileRoutes);
 
 // Middleware 404 para manejar errores de rutas no encontradas
 app.use((req, res, next) => {
@@ -88,7 +90,6 @@ app.use((error, req, res, next) => {
 });
 
 //Port listening...
-//const ip = '0.0.0.0';
 app.listen(app.get('PORT'), () => {
     console.log('Server up on port:', app.get('PORT'));
     dbConnect();

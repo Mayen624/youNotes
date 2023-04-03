@@ -22,6 +22,30 @@
 </div>
 {{/if}}
 
+{{#if warning_msg}}
+<div id="alerts" style="margin: 0px 20px 0px 20px;">
+    <div class="alert alert-warning  d-flex align-items-center alert-dismissible fade show mt-3" role="alert">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <div>
+           {{warning_msg}}
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</div>
+{{/if}}
+
+{{#if error_msg}}
+<div id="alerts" style="margin: 0px 20px 0px 20px;">
+    <div class="alert alert-danger  d-flex align-items-center alert-dismissible fade show mt-3" role="alert">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <div>
+           {{error_msg}}
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</div>
+{{/if}}
+
 <div class="box mt-4">
   <div class="divisor">
 
@@ -46,7 +70,7 @@
 
 {{#if notes}}
   <div class="notes">
-   {{#each notes}}
+    {{#each notes}}
       <div class="card">
         <div id="tittle-divisor" class="card-header">
           <div class="tittle">
@@ -61,7 +85,7 @@
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
                   <li><a class="dropdown-item" href="/notes/edit/{{this._id}}"><i class="bi bi-pencil-square"></i> Editar</a></li>
                   <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" type="button" id="delete-btn" idNote="{{this._id}}"><i class="bi bi-trash-fill"></i> Eliminar</a></li>
+                  <li><button class="dropdown-item" type="button" id="delete-btn" data-id="{{this._id}}"><i class="bi bi-trash-fill"></i> Eliminar</button></li>
                 </ul>
               </li>
             </ul>

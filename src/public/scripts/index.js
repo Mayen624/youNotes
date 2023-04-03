@@ -1,13 +1,3 @@
-console.log('connected...');
-
-let delete_btn = document.getElementById('delete-btn');
-
-const btnTrigger = (e) => {
-    console.log(e.target)
-}
-
-delete_btn.addEventListener('click', btnTrigger);
-
 
 const btnShowPass = document.getElementById('show-pass');
 btnShowPass.style.display = 'none';

@@ -121,7 +121,15 @@ const editNotes = async (req,res) => {
     
 
 const deleteNotes = async (req,res) => {
-    const {} = req.body;
+    const {id} = req.query
+
+    if(id){
+        await noteshemma.deleteOne({_id: id});
+        res.json({warning_msg: 'Nota eleminada.'}).status(200);
+    }else{
+        req.flash('error_msg', 'Ha ocurrido un error indesperad, si el problema persiste intentelo mas tarde.');
+        res.redirect('/notes');
+    }
 }
 
 const logout = async (req,res) => {

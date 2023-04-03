@@ -12,7 +12,7 @@ routes.get('/edit/:id', isAuthenticated , notesController.editNotesForm);
 
 routes.post('/edit', isAuthenticated , notesController.editNotes)
 
-routes.delete('/delete/:id', notesController.deleteNotes);
+routes.get('/delete', notesController.deleteNotes);
 
 routes.get('/logout', notesController.logout);
 

@@ -11,17 +11,21 @@ passport.use(new LocalStrategy({
 
     const user = await userShemma.findOne({email});
 
+   if(user.enabled === false){
         if(!user){
             return done(null, false, {message: 'Usuario no encontrado.'});
         }else{
             const match = await user.matchPassword(password);
-            
+                
             if(!match){
-                return done(null, false, {message: 'Contraseña incorrecta.'});
+                    return done(null, false, {message: 'Contraseña incorrecta.'});
             }else{
                 return done(null, user);
             }
         }   
+    }else{
+        return done(null, false, {message: 'Este usuario esta deshabilitado o no ha finalizado la confirmacion de su cuenta por correo.'});
+    }
 
 }));
 

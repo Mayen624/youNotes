@@ -5,4 +5,16 @@ const profileRender = async (req,res) => {
     res.render('../views/layouts/profile', {layout: 'profile.hbs', userName: userInfo.user})
 }
 
-module.exports = {profileRender}
+const editProfile = async (req,res) => {
+
+}
+
+const addSecretKey = async (req,res) => {
+
+}
+
+const forgotSecretKey = async (req,res) => {
+
+}
+
+module.exports = {profileRender, editProfile, addSecretKey, forgotSecretKey}

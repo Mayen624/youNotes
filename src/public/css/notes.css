@@ -60,6 +60,10 @@ body{
     border-radius: 30px;
 }
 
+#navbarNav{
+    padding-right: 25px;
+}
+
 @media (max-width: 990px) {
     #centerIsResponsive {
       text-align: center;
@@ -72,5 +76,9 @@ body{
 
     #plus-icon{
         display: none;
+    }
+
+    #navbarNav{
+        padding-right: 0;
     }
 }

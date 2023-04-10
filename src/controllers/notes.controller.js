@@ -134,7 +134,7 @@ const deleteNotes = async (req,res) => {
 
 const logout = async (req,res) => {
     req.logout();
-    req.flash('success_msg', 'sesion cerada.');
+    req.flash('success_msg', 'Sesion cerada.');
     res.redirect('/auth');
 }
 

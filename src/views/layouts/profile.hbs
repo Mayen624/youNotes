@@ -44,8 +44,13 @@
                                 </div>
                                 </div>
                                 <div class="d-flex pt-1">
-                                <button type="button" class="btn btn-outline-primary me-1 flex-grow-1">Secret key</button>
-                                <button type="button" class="btn btn-primary flex-grow-1">Edit profile</button>
+                                <button 
+                                    type="button" class="btn btn-outline-primary me-1 flex-grow-1" 
+                                    data-bs-toggle="modal" data-bs-target="#addKey">Secret key
+                                </button>
+                                <button 
+                                    type="button" class="btn btn-primary flex-grow-1"
+                                    data-bs-toggle="modal" data-bs-target="#editProfile">Edit profile</button>
                                 </div>
                             </div>
                             </div>
@@ -55,6 +60,9 @@
                 </div>
             </div>
         </section>
+
+    {{>addSecretKeyForm}}
+    {{>editProfileForm}}
 
     {{>footer}}
 

@@ -1,4 +1,4 @@
-const {dbConnect} = require('./src/db/Connection.js');
+const { dbConnect } = require('./src/db/Connection.js');
 const exphbs = require('express-handlebars');
 const session = require('express-session');
 const flash = require('connect-flash');
@@ -14,7 +14,7 @@ require('./src/config/passport');
 //Config
 dotenv.config(); // Allow use files .env
 app.use(morgan('dev')); // Allow to show method http, status codes http and time in console during server is up
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 
 app.set('PORT', process.env.PORT || 5000);
 
@@ -33,17 +33,17 @@ app.set('view engine', '.hbs');
 app.use(session({
     secret: 'secret',
     resave: true,
-    cookie: {_expires: 3600000},
+    cookie: { _expires: 3600000 },
     saveUninitialized: true
 }))
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(flash()); 
+app.use(flash());
 
 
 //Global variables
-app.use((req,res,next) => {
+app.use((req, res, next) => {
     res.locals.success_msg = req.flash("success_msg");
     res.locals.error_msg = req.flash("error_msg");
     res.locals.warning_msg = req.flash("warning_msg");
@@ -56,7 +56,7 @@ app.use((req,res,next) => {
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js'));
 app.use('/bi', express.static(__dirname + '/node_modules/bootstrap-icons'));
-app.use('/public', express.static(__dirname + '/src/public')); 
+app.use('/public', express.static(__dirname + '/src/public'));
 
 //Routes
 const indexRoutes = require('./src/routes/auth.routes');
@@ -67,8 +67,8 @@ const profileRoutes = require('./src/routes/profile.routes');
 
 //Using routes
 //app.use('/', mainRoute); 
-app.use('/auth', indexRoutes); 
-app.use('/about', staticRoutes); 
+app.use('/auth', indexRoutes);
+app.use('/about', staticRoutes);
 app.use('/signup', signUpRoutes);
 app.use('/notes', noteRoutes);
 app.use('/profile', profileRoutes);
@@ -79,7 +79,7 @@ app.use((req, res, next) => {
     error.status = 404;
     next(error);
 });
-  
+
 // Middleware de manejo de errores para manejar cualquier otro error
 app.use((error, req, res, next) => {
     res.status(error.status || 500);

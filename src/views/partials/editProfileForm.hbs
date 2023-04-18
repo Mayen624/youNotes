@@ -1,5 +1,6 @@
 <!-- Modal -->
-<div class="modal fade" id="editProfile" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="editProfile" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -9,26 +10,26 @@
       <div class="modal-body">
 
         <form action="/profile/edit" method="POST">
-            <div class="mb-3">
-                <label class="form-label">Nombres:</i></label>
-                <input type="text" name="names" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Profesión:</i></label>
-                <input type="text" name="work" class="form-control">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Sexo:</i></label>
-                <input type="text" name="sex" class="form-control">
-            </div>
-              <div class="mb-3">
-                <label class="form-label">Edad:</i></label>
-                <input type="text" name="age" class="form-control">
-            </div>
-             <div class="mb-3">
-                <label class="form-label">Imagen:</i></label>
-                <input type="file" name="img" class="form-control">
-            </div>
+          <div class="mb-3">
+            <label class="form-label">Nombres:</i></label>
+            <input type="text" name="names" class="form-control" value="{{userInfo.names}}">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Profesión:</i></label>
+            <input type="text" name="work" class="form-control" value="{{userInfo.work}}">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Sexo:</i></label>
+            <input type="text" name="sex" class="form-control" value="{{userInfo.sex}}">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Edad:</i></label>
+            <input type="date" name="age" class="form-control" value="{{dateJoin}}">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Imagen:</i></label>
+            <input type="file" name="img" class="form-control">
+          </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>

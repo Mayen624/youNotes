@@ -22,5 +22,9 @@ copyBtn.addEventListener('click', (e) => {
     //Seguir investigando...
 })
 
+setTimeout(() => {
+    document.getElementById('alerts').style.display = 'none';
+}, 15000)
+
 
 

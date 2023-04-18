@@ -4,8 +4,11 @@ const {Schema, model} = mongoose;
 
 const newUserShemma = new Schema({
     user    : {type: String, unique: true, require: true},
-    name    : {type: String},
-    lastName: {type: String},
+    names   : {type: String},
+    work    : {type: String},
+    sex     : {type: String},
+    age     : {type: String},
+    key     : {type: String},
     email   : {type: String, unique: true, require: true},
     password: {type: String},
     image   : {type: String},

@@ -15,7 +15,7 @@ const auth = passport.authenticate('local', {
 const logout = async (req,res) => {
     req.logout( (err) => {
         if (err) { return next(err); }
-        req.flash( "success_msg" , "sesión cerrada." );
+        req.flash( "success_msg" , "Sesión cerrada." );
         res.redirect("/auth");
     });
 

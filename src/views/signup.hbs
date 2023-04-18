@@ -1,28 +1,58 @@
 <div class="container mt-3">
     <div class="row justify-content-center" style="margin-top: 1rem;">
         <div class="col-ms-8 col-md-6 col-lg-4 rounded p-4 shadow" style="background-color: #F7F7F7;">
-                <div class="row justify-content-center mb-4">
-                    <img class="img-fluid rounded-circle" src="/public/images/notepad.png" alt="logo" style="width: 10rem;">
-                </div>
+            <div class="row justify-content-center mb-4">
+                <img class="img-fluid rounded-circle" src="/public/images/notepad.png" alt="logo" style="width: 10rem;">
+            </div>
             <form action="/signup" method="POST">
                 <div class="mb-4">
-                    <div class="input-group flex-nowrap" style="margin: 10px;">
+                    <div class="input-group flex-nowrap my-2">
                         <span class="input-group-text" id="addon-wrapping"><i class="bi bi-person-fill"></i></span>
-                        <input name="User" type="text" class="form-control" placeholder="Usuario" id="user" maxlength="10" value="{{User}}">
+                        <input name="User" type="text" class="form-control" placeholder="Usuario" id="user"
+                            maxlength="10" value="{{User}}">
                     </div>
-                    <div class="input-group flex-nowrap" style="margin: 10px;">
+                     <div class="input-group flex-nowrap my-2">
+                        <span class="input-group-text" id="addon-wrapping"><i class="bi bi-card-checklist"></i></span>
+                        <input name="names" type="text" class="form-control" placeholder="Nombres" id="names"
+                            maxlength="15" value="{{names}}">
+                    </div>
+                    <div class="input-group flex-nowrap my-2">
                         <span class="input-group-text" id="addon-wrapping"><i class="bi bi-envelope"></i></i></span>
-                        <input name="Email" type="email" class="form-control" placeholder="Correo" id="email" value="{{Email}}">
+                        <input name="Email" type="email" class="form-control" placeholder="Correo" id="email"
+                            value="{{Email}}">
                     </div>
-                    <div class="input-group flex-nowrap" style="margin: 10px;">
+                    <div class="input-group flex-nowrap my-2">
                         <span class="input-group-text" id="addon-wrapping"><i class="bi bi-lock-fill"></i></span>
-                        <input name="Password" type="password" class="form-control" placeholder="Contraseña" id="password">
-                        <button id="show-pass" type="button" class="input-group-text"><i class="bi bi-eye-fill"></i></button>
+                        <input name="Password" type="password" class="form-control" placeholder="Contraseña"
+                            id="password">
+                        <button id="show-pass" type="button" class="input-group-text"><i
+                                class="bi bi-eye-fill"></i></button>
                     </div>
-                    <div class="input-group flex-nowrap" style="margin: 10px;">
+                    <div class="input-group flex-nowrap my-2">
                         <span class="input-group-text" id="addon-wrapping"><i class="bi bi-unlock-fill"></i></i></span>
-                        <input name="confirmPass" type="password" class="form-control" placeholder="Confirmar contraseña" id="confirmPass">
+                        <input name="confirmPass" type="password" class="form-control"
+                            placeholder="Confirmar contraseña" id="confirmPass">
                     </div>
+                    <div class="input-group flex-nowrap my-2">
+                        <span class="input-group-text" id="addon-wrapping"><i
+                                class="bi bi-person-lines-fill"></i></i></span>
+                        <input name="work" type="text" class="form-control" placeholder="Profesión" id="profession" value="{{work}}">
+                    </div>
+                    <div class="input-group flex-nowrap my-2">
+                        <span class="input-group-text" id="addon-wrapping"><i
+                                class="bi bi-gender-ambiguous"></i></i></span>
+                        <select name="sex" id="sex" class="form-select">
+                            <option value="" selected>-- Genero --</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Femenino">Femenino</option>
+                        </select>
+                    </div>
+                    <div class="input-group flex-nowrap my-2">
+                        <span class="input-group-text" id="addon-wrapping"><i
+                                class="bi bi-calendar-week"></i></i></span>
+                        <input name="age" type="date" class="form-control" placeholder="Edad" id="age" value="{{age}}">
+                    </div>
+
                 </div>
                 <div class="mb-4">
                     <button type="submit" class="btn btn-dark w-100">Registrarme</button>

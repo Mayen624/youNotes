@@ -3,7 +3,7 @@ body{
     margin: 0;
     display: flex;
     font-size: 15px;
-    min-height:100vh;
+    max-height:100vh;
     overflow-x: hidden;
     flex-direction:column; 
 }
@@ -46,6 +46,17 @@ body{
     margin: 10px;
     padding: 5px;
   }
+
+  #btn-genText{
+    text-decoration: none;
+    justify-content: center;
+  }
+
+  .divider{
+    display: flex;
+    justify-content: space-between;
+  }
+
 
 #footer{
     margin-top:auto;

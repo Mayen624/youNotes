@@ -12,6 +12,7 @@
         <form action="/profile/edit" method="POST">
           <div class="mb-3">
             <label class="form-label">Nombres:</i></label>
+            <input type="hidden" name="id" class="form-control mb-1" value="{{userInfo._id}}" readonly >
             <input type="text" name="names" class="form-control" value="{{userInfo.names}}">
           </div>
           <div class="mb-3">

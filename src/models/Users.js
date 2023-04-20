@@ -5,13 +5,13 @@ const {Schema, model} = mongoose;
 const newUserShemma = new Schema({
     user    : {type: String, unique: true, require: true},
     names   : {type: String},
-    work    : {type: String},
-    sex     : {type: String},
-    age     : {type: String},
-    key     : {type: String},
+    work    : {type: String, default: null},
+    sex     : {type: String, default: null},
+    age     : {type: String, default: null},
+    key     : {type: String, default: null},
     email   : {type: String, unique: true, require: true},
     password: {type: String},
-    image   : {type: String},
+    image   : {type: String, default: null},
     enabled : {type: Boolean}
 
 }, {

@@ -14,15 +14,15 @@ const addUser = async (req, res) => {
 
     //Data came from req post
     const { User, names, work, age, sex, Email, Password, confirmPass } = req.body;
-    
+
     //Fields validation
-    if(!User || !names || !work || !age || !sex || !Email ||! Password || !confirmPass){
-        errors.push({message: 'Todos los campos son requeridos.'});
+    if (!User || !names || !Email || !Password || !confirmPass) {
+        errors.push({ message: 'Todos los campos son requeridos.' });
     }
 
     //Age validation
-    if(calculateAge(age) <= 8){
-        errors.push({message: 'Debes ser mayor a 8 años.'})
+    if (calculateAge(age) <= 8) {
+        errors.push({ message: 'Debes ser mayor a 8 años.' })
     }
 
     //Password validations
@@ -61,10 +61,10 @@ const addUser = async (req, res) => {
 
     //If there's no error the user will be save
     if (errors.length > 0) {
-        res.render('../views/signup', { errors, User, names, work, sex, age, Email, Password });
+        res.render('../views/signup', { errors, User, names, Email, Password });
     } else {
 
-        const newUser = new newUserShemma({ user: User, names: names, work: work, sex: sex, age: calculateAge(age), key: '', email: Email, password: Password, image: '', enabled: false });
+        const newUser = new newUserShemma({ user: User, names: names, email: Email, password: Password, enabled: false });
         newUser.password = await newUser.encryptPassword(Password);
         await newUser.save();
         req.flash('success_msg', 'Usuario creado exitosamente!');

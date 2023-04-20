@@ -56,6 +56,7 @@ app.use((req, res, next) => {
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js'));
 app.use('/bi', express.static(__dirname + '/node_modules/bootstrap-icons'));
+app.use('/images', express.static(__dirname + '/src/public/images'));
 app.use('/public', express.static(__dirname + '/src/public'));
 
 //Routes

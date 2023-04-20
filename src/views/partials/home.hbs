@@ -1,15 +1,3 @@
-{{#if error}}
-<div id="alerts" style="margin: 0px 20px 0px 20px;">
-    <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show mt-3 mb-0" role="alert">
-        <i class="bi bi-exclamation-triangle-fill"></i>&nbsp;&nbsp;
-        <div>
-           {{error}}
-        </div>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-</div>
-{{/if}}
-
 {{#if success_msg}}
 <div id="alerts" style="margin: 0px 20px 0px 20px;">
     <div class="alert alert-success d-flex align-items-center alert-dismissible fade show mt-3" role="alert">
@@ -22,22 +10,10 @@
 </div>
 {{/if}}
 
-{{#if warning_msg}}
-<div id="alerts" style="margin: 0px 20px 0px 20px;">
-    <div class="alert alert-warning  d-flex align-items-center alert-dismissible fade show mt-3" role="alert">
-        <i class="bi bi-exclamation-triangle-fill"></i>
-        <div>
-           {{warning_msg}}
-        </div>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-</div>
-{{/if}}
-
 {{#if error_msg}}
 <div id="alerts" style="margin: 0px 20px 0px 20px;">
     <div class="alert alert-danger  d-flex align-items-center alert-dismissible fade show mt-3" role="alert">
-        <i class="bi bi-exclamation-triangle-fill"></i>
+        <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"></i>
         <div>
            {{error_msg}}
         </div>

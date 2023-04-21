@@ -75,20 +75,20 @@ app.use('/notes', noteRoutes);
 app.use('/profile', profileRoutes);
 
 // Middleware 404 para manejar errores de rutas no encontradas
-app.use((req, res, next) => {
-    const error = new Error('Not Found');
-    error.status = 404;
-    next(error);
-});
+// app.use((req, res, next) => {
+//     const error = new Error('Not Found');
+//     error.status = 404;
+//     next(error);
+// });
 
-// Middleware de manejo de errores para manejar cualquier otro error
-app.use((error, req, res, next) => {
-    res.status(error.status || 500);
-    res.render(app.get('views') + '/layouts/404', {
-        error_msg: 'Not Found',
-        description: 'Lo sentimos, ha ocurrido un error, pagina no encontrada!'
-    });
-});
+// // Middleware de manejo de errores para manejar cualquier otro error
+// app.use((error, req, res, next) => {
+//     res.status(error.status || 500);
+//     res.render(app.get('views') + '/layouts/404', {
+//         error_msg: 'Not Found',
+//         description: 'Lo sentimos, ha ocurrido un error, pagina no encontrada!'
+//     });
+// });
 
 //Port listening...
 app.listen(app.get('PORT'), () => {

@@ -20,6 +20,16 @@ btnRemove.forEach(btn => {
     })
 })
 
+const inputsKeyId = document.getElementById('sKeyId');
+
+let btnDecryptNote = document.querySelectorAll('#btnDecryptNote');
+btnDecryptNote.forEach(btn => {
+    btn.addEventListener('click', () => {
+        let noteId = btn.getAttribute('data-id');
+        inputsKeyId.value = noteId;
+    })
+})
+
 
 setTimeout(() => {
     document.getElementById('alerts').style.display = 'none';

@@ -1,7 +1,8 @@
 const { format } = require('date-fns');
 const noteshemma = require('../models/Notes');
-const {encrypt, decrypt} = require('../config/crypto');
+const { encrypt, decrypt } = require('../config/crypto');
 const categoryShemma = require('../models/Categories');
+const bcrypt = require('bcrypt');
 
 let currentDate = new Date(); //Current date
 
@@ -19,7 +20,7 @@ const notesRender = async (req, res) => {
     }
 
     const notes = await noteshemma.find(filter); //Notes of user
-    res.render('../views/layouts/notes', { layout: 'notes.hbs', notes, userName: userInfo.user });
+    res.render('../views/layouts/notes', { layout: 'notes.hbs', notes, userName: userInfo.user, userInfo });
 }
 
 
@@ -41,14 +42,9 @@ const addNote = async (req, res) => {
         return res.redirect('/notes');
     }
 
-    // if (userData.key === null && formattedCategory == 'CREDENCIALES') {
-    //     req.flash('error_msg', ' Debes crear una llave de seguridad para poder crear notas de tipo "credenciales". Puedes crearla en la configuracion de tu perfil.');
-    //     return res.redirect('/notes');
-    // }
-
     //ENCRYPT CONTENT IF CATEGORY IS CREDENTIALS AND KEY ISN'T NULL
 
-    if(userData.key !== null && formattedCategory == 'CREDENCIALES'){
+    if (userData.key !== null && formattedCategory == 'CREDENCIALES') {
         try {
             const newNote = new noteshemma({
                 id_user: req.user._id,
@@ -58,14 +54,14 @@ const addNote = async (req, res) => {
                 createdAt: format(currentDate, 'dd/MM/yyyy'),
                 updatedAt: format(currentDate, 'dd/MM/yyyy')
             })
-        
+
             await newNote.save();
             req.flash("success_msg", "Nueva nota añadida.");
             res.redirect('/notes');
         } catch (e) {
             console.log(e)
         }
-    }else{
+    } else {
         req.flash('error_msg', ' Debes crear una llave de seguridad para poder crear notas de tipo "credenciales". Puedes crearla en la configuracion de tu perfil.');
         return res.redirect('/notes');
     }
@@ -125,6 +121,32 @@ const deleteNotes = async (req, res) => {
     }
 }
 
+
+const decryptNote = async (req, res) => {
+    const userData = req.user;
+    const { id, sKey } = req.body;
+
+    if (!sKey) {
+        req.flash('error_msg', 'Llave faltante.');
+        return res.redirect('/notes');
+    }
+
+    if (!id) {
+        req.flash('error_msg', 'Ha ocurrido un error inesperado!, si el problema persiste preuba intentarlo mas tarde.');
+        return res.redirect('/notes');
+    }
+
+    try {
+        const note = await noteshemma.findOne({ _id: id });
+        const decryptedContent = await decrypt(sKey, userData.key, note.contenido);
+        await noteshemma.findByIdAndUpdate(id, {contenido: decryptedContent});
+        req.flash('success_msg', 'Nota desencriptada exitosamente.');
+        return res.redirect('/notes');
+    } catch (e) {
+        console.error(e);
+    }
+}
+
 const logout = async (req, res) => {
     req.logout();
     req.flash('success_msg', 'Sesion cerada.');
@@ -132,4 +154,4 @@ const logout = async (req, res) => {
 }
 
 
-module.exports = { notesRender, logout, addNote, editNotesForm, editNotes, deleteNotes }
+module.exports = { notesRender, logout, addNote, editNotesForm, editNotes, deleteNotes, decryptNote }

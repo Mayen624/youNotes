@@ -1,24 +1,24 @@
 {{#if success_msg}}
 <div id="alerts" style="margin: 0px 20px 0px 20px;">
-    <div class="alert alert-success d-flex align-items-center alert-dismissible fade show mt-3" role="alert">
-        <i class="bi bi-check-circle-fill bi flex-shrink-0 me-2"></i>
-        <div>
-           {{success_msg}}
-        </div>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  <div class="alert alert-success d-flex align-items-center alert-dismissible fade show mt-3" role="alert">
+    <i class="bi bi-check-circle-fill bi flex-shrink-0 me-2"></i>
+    <div>
+      {{success_msg}}
     </div>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
 </div>
 {{/if}}
 
 {{#if error_msg}}
 <div id="alerts" style="margin: 0px 20px 0px 20px;">
-    <div class="alert alert-danger  d-flex align-items-center alert-dismissible fade show mt-3" role="alert">
-        <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"></i>
-        <div>
-           {{error_msg}}
-        </div>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  <div class="alert alert-danger  d-flex align-items-center alert-dismissible fade show mt-3" role="alert">
+    <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"></i>
+    <div>
+      {{error_msg}}
     </div>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
 </div>
 {{/if}}
 
@@ -28,16 +28,17 @@
     <div class="container-fluid" style="">
       <form class="d-flex" action="/notes?" method="GET">
         <div class="input-group">
-          <input class="form-control me-2" name="filtro" placeholder="Buscar nota por nombre de categoria..." aria-label="Search">
+          <input class="form-control me-2" name="filtro" placeholder="Buscar nota por nombre de categoria..."
+            aria-label="Search">
           <button id="btn-search" class="input-group-text"><i class="bi bi-search"></i></button>
         </div>
       </form>
     </div>
 
     <div class="addNote">
-        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNote">
-          Nueva nota <i id="plus-icon" class="bi bi-plus"></i>
-        </button>
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNote">
+        Nueva nota <i id="plus-icon" class="bi bi-plus"></i>
+      </button>
     </div>
 
   </div>
@@ -45,43 +46,56 @@
 
 
 {{#if notes}}
-  <div class="notes">
-    {{#each notes}}
-      <div class="card">
-        <div id="tittle-divisor" class="card-header">
-          <div class="tittle">
-            <p class="tittle-text fw-bold">{{this.titulo}}</p>
-          </div>
-          <div class="actions">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item dropdown">
-                <a class="nav-link" role="button" data-bs-toggle="dropdown" title="Opciones" aria-expanded="true">
-                  <i style="font-size: 18px;" class="bi bi-sliders"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
-                  <li><a class="dropdown-item" href="/notes/edit/{{this._id}}"><i class="bi bi-pencil-square"></i> Editar</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><button class="dropdown-item" type="button" id="delete-btn" data-id="{{this._id}}"><i class="bi bi-trash-fill"></i> Eliminar</button></li>
-                </ul>
+<div class="notes">
+  {{#each notes}}
+  <div class="card">
+    <div id="tittle-divisor" class="card-header">
+      <div class="tittle">
+        <p class="tittle-text fw-bold">{{this.titulo}}</p>
+      </div>
+      <div class="actions">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item dropdown">
+            <a class="nav-link" role="button" data-bs-toggle="dropdown" title="Opciones" aria-expanded="true">
+              <i style="font-size: 18px;" class="bi bi-sliders"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+              <li><a class="dropdown-item" href="/notes/edit/{{this._id}}"><i class="bi bi-pencil-square"></i>
+                  Editar</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><button class="dropdown-item" type="button" id="delete-btn" data-id="{{this._id}}"><i
+                    class="bi bi-trash-fill"></i> Eliminar
+                </button>
+              </li>
+               <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><button id="btnDecryptNote" class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#decryptNote" data-id="{{this._id}}">
+                <i class="bi bi-vector-pen"></i> Desencriptar
+                </button>
               </li>
             </ul>
-          </div>
-        </div>
-        <div class="card-body">
-          <h5>{{this.categoria}}:</h5>
-          <p id="note-content" class="card-text">
-            {{this.contenido}}
-          </p>
-        </div>
-        <div class="card-footer">
-          <div class="date-card">
-            {{this.createdAt}}
-          </div>
-          <div class="favorite-button">
-            <button id="btn-reminder"><i class="bi bi-bell" title="Recuerdame"></i></button>
-          </div>
-        </div>
+          </li>
+        </ul>
       </div>
-    {{/each}}
+    </div>
+    <div class="card-body">
+      <h5>{{this.categoria}}:</h5>
+      <p id="note-content" class="card-text">
+        {{this.contenido}}
+      </p>
+    </div>
+    <div class="card-footer">
+      <div class="date-card">
+        {{this.createdAt}}
+      </div>
+      <div class="favorite-button">
+        <button id="btn-reminder"><i class="bi bi-bell" title="Recuerdame"></i></button>
+      </div>
+    </div>
   </div>
+  {{/each}}
+</div>
 {{/if}}

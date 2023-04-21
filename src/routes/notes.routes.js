@@ -1,19 +1,21 @@
-const {Router} = require('express');
+const { Router } = require('express');
 const main = require('../controllers/mainController');
 const notesController = main.mainController.notesController;
-const {isAuthenticated} = require('../helpers/sessionAuth');
-const routes = Router();
+const { isAuthenticated } = require('../helpers/sessionAuth');
+const router = Router();
 
-routes.get('/',isAuthenticated, notesController.notesRender);
+router.get('/', isAuthenticated, notesController.notesRender);
 
-routes.post('/add', isAuthenticated, notesController.addNote);
+router.post('/add', isAuthenticated, notesController.addNote);
 
-routes.get('/edit/:id', isAuthenticated , notesController.editNotesForm);
+router.get('/edit/:id', isAuthenticated, notesController.editNotesForm);
 
-routes.post('/edit', isAuthenticated , notesController.editNotes)
+router.post('/edit', isAuthenticated, notesController.editNotes)
 
-routes.get('/delete', notesController.deleteNotes);
+router.get('/delete', isAuthenticated, notesController.deleteNotes);
 
-routes.get('/logout', notesController.logout);
+router.post('/decryptNote', isAuthenticated, notesController.decryptNote);
 
-module.exports = routes;
+router.get('/logout', notesController.logout);
+
+module.exports = router;

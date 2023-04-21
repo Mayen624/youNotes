@@ -1,0 +1,28 @@
+<!-- Modal -->
+<div class="modal fade" id="decryptNote" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Desencriptar nota</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form action="/notes/decryptNote" method="POST">
+          <input id="sKeyId" type="hidden" name="id" class="form-control" readonly>
+          <label class="form-label">Llave:</i></label>
+          <div class="input-group">
+            <input id="sKey" type="text" name="sKey" class="form-control">
+            <button id="copy" type="button" class="input-group-text"><i class="bi bi-clipboard"></i></button>
+          </div>
+          <p class="p-1 mt-3"><a href="/forgotKey">¿Olvidastes tu llave?</a></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+        <button type="submit" class="btn btn-success">Añadir</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>

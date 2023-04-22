@@ -69,13 +69,16 @@
                     class="bi bi-trash-fill"></i> Eliminar
                 </button>
               </li>
-               <li>
+              {{#if this.isEncrypted}}
+              <li>
                 <hr class="dropdown-divider">
               </li>
-              <li><button id="btnDecryptNote" class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#decryptNote" data-id="{{this._id}}">
-                <i class="bi bi-vector-pen"></i> Desencriptar
+              <li><button id="btnDecryptNote" class="dropdown-item" type="button" data-bs-toggle="modal"
+                  data-bs-target="#decryptNote" data-id="{{this._id}}">
+                  <i class="bi bi-vector-pen"></i> Desencriptar
                 </button>
               </li>
+              {{/if}}
             </ul>
           </li>
         </ul>

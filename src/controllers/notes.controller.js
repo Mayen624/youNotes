@@ -1,8 +1,8 @@
+const mongoose = require('mongoose');
 const { format } = require('date-fns');
 const noteshemma = require('../models/Notes');
-const { encrypt, decrypt } = require('../config/crypto');
 const categoryShemma = require('../models/Categories');
-const bcrypt = require('bcrypt');
+const { encrypt, decrypt } = require('../config/crypto');
 
 let currentDate = new Date(); //Current date
 
@@ -33,7 +33,7 @@ const addNote = async (req, res) => {
     const formattedCategory = category.toUpperCase();
 
     if (tittle == "" || category == "" || content == "") {
-        req.flash('error_msg', ' Todos los datos son requerido.');
+        req.flash('error_msg', ' Todos los datos son requeridos.');
         return res.redirect('/notes');
     }
 
@@ -44,26 +44,47 @@ const addNote = async (req, res) => {
 
     //ENCRYPT CONTENT IF CATEGORY IS CREDENTIALS AND KEY ISN'T NULL
 
-    if (userData.key !== null && formattedCategory == 'CREDENCIALES') {
-        try {
-            const newNote = new noteshemma({
-                id_user: req.user._id,
-                titulo: tittle,
-                categoria: formattedCategory,
-                contenido: encrypt(content, userData.key),
-                createdAt: format(currentDate, 'dd/MM/yyyy'),
-                updatedAt: format(currentDate, 'dd/MM/yyyy')
-            })
+    if (formattedCategory == 'CREDENCIALES') {
 
-            await newNote.save();
-            req.flash("success_msg", "Nueva nota añadida.");
-            res.redirect('/notes');
-        } catch (e) {
-            console.log(e)
+        if (userData.key !== null) {
+            try {
+                const newNote = new noteshemma({
+                    id_user: req.user._id,
+                    titulo: tittle,
+                    categoria: formattedCategory,
+                    contenido: encrypt(content, userData.key),
+                    createdAt: format(currentDate, 'dd/MM/yyyy'),
+                    updatedAt: format(currentDate, 'dd/MM/yyyy'),
+                    isEncrypted: true
+                })
+
+                await newNote.save();
+                req.flash("success_msg", "Nueva nota añadida.");
+                return res.redirect('/notes');
+            } catch (e) {
+                console.log(e)
+            }
+        } else {
+            req.flash('error_msg', ' Debes crear una llave de seguridad para poder crear notas de tipo "credenciales". Puedes crearla en la configuracion de tu perfil.');
+            return res.redirect('/notes');
         }
-    } else {
-        req.flash('error_msg', ' Debes crear una llave de seguridad para poder crear notas de tipo "credenciales". Puedes crearla en la configuracion de tu perfil.');
+    }
+
+    try {
+        const newNote = new noteshemma({
+            id_user: req.user._id,
+            titulo: tittle,
+            categoria: formattedCategory,
+            contenido: content,
+            createdAt: format(currentDate, 'dd/MM/yyyy'),
+            updatedAt: format(currentDate, 'dd/MM/yyyy')
+        })
+
+        await newNote.save();
+        req.flash("success_msg", "Nueva nota añadida.");
         return res.redirect('/notes');
+    } catch (e) {
+        console.log(e)
     }
 
 }
@@ -136,10 +157,17 @@ const decryptNote = async (req, res) => {
         return res.redirect('/notes');
     }
 
+    const note = await noteshemma.findOne({ _id: id });
+
+    // if (note.categoria == 'CREDENCIALES' && userData.key !== null) {
+    //     req.flash('error_msg', 'Esta nota no tiene contenido para desencriptar.');
+    //     return res.redirect('/notes');
+    // }
+
+
     try {
-        const note = await noteshemma.findOne({ _id: id });
         const decryptedContent = await decrypt(sKey, userData.key, note.contenido);
-        await noteshemma.findByIdAndUpdate(id, {contenido: decryptedContent});
+        await noteshemma.findByIdAndUpdate(id, { contenido: decryptedContent, isEncrypted: false });
         req.flash('success_msg', 'Nota desencriptada exitosamente.');
         return res.redirect('/notes');
     } catch (e) {
@@ -148,6 +176,8 @@ const decryptNote = async (req, res) => {
 }
 
 const logout = async (req, res) => {
+    //Hacer un req de todas las notas que sean categoria "RECORDATORIO" y isEncrypted sea falso para luego al cerrar sesion encryptarlas
+    //{categoria: 'CREDENCIALES', isEncrypted: false, id_user: mongoose.Types.ObjectId(userData._id)}
     req.logout();
     req.flash('success_msg', 'Sesion cerada.');
     res.redirect('/auth');

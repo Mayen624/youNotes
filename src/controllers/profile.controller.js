@@ -19,6 +19,11 @@ const editProfile = async (req, res) => {
         return res.redirect('/profile');
     }
 
+    if(formattedAge <= 8){
+        req.flash('error_msg', 'Debes ser mayor a 8 años.');
+        return res.redirect('/profile');
+    }
+
     if (names === userData.names && work === userData.work && sex === userData.sex && formattedAge == userData.age) {
         req.flash('error_msg', 'Los datos no pueden ser los mismos.');
         return res.redirect('/profile');

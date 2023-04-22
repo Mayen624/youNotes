@@ -8,7 +8,8 @@ const notesShemma = new Schema({
     categoria   : {type: String, require: true},
     contenido   : {type: String, require: true},
     createdAt   : {type: String, requiere: true},
-    updatedAt   : {type: String, requiere: true}
+    updatedAt   : {type: String, requiere: true},
+    isEncrypted : {type: Boolean, default: false}
 })
 
 module.exports = model('notes', notesShemma);

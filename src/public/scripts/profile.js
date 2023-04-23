@@ -1,10 +1,10 @@
-console.log('working from profile.js');
-
 let keyBtn = document.getElementById('keyBtn');
 let keyInput = document.getElementById('key');
 let copyBtn = document.getElementById('copy');
+let btnsKey = document.getElementById('btn-sKey');
 let key;
 let val;
+let sKey;
 
 const generateKey = () => {
     return Math.random().toString(25).substring(2, 12);
@@ -16,10 +16,10 @@ keyBtn.addEventListener('click', (e) => {
     keyInput.value = key;
 })
 
-copyBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    val = keyInput.value.select();
-    //Seguir investigando...
+
+btnsKey.addEventListener('click', (e) => {
+    sKey = keyInput.value;
+    localStorage.setItem('sKey', sKey);
 })
 
 setTimeout(() => {

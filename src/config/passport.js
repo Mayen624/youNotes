@@ -1,5 +1,4 @@
 const passport = require('passport');
-const bycrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
 
 const userShemma = require('../models/Users');
@@ -25,11 +24,6 @@ passport.use(new LocalStrategy({
             return done(null, user);
         }
     }
-
-
-
-
-
 }));
 
 passport.serializeUser((user, done) => {

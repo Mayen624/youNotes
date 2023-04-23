@@ -176,8 +176,6 @@ const decryptNote = async (req, res) => {
 }
 
 const logout = async (req, res) => {
-    //Hacer un req de todas las notas que sean categoria "RECORDATORIO" y isEncrypted sea falso para luego al cerrar sesion encryptarlas
-    //{categoria: 'CREDENCIALES', isEncrypted: false, id_user: mongoose.Types.ObjectId(userData._id)}
     req.logout();
     req.flash('success_msg', 'Sesion cerada.');
     res.redirect('/auth');

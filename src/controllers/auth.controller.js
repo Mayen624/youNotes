@@ -18,14 +18,10 @@ const auth = passport.authenticate('local', {
 //Close the user's session
 const logout = async (req,res) => {
 
-    const userData = req.user;
-    //Hacer un req de todas las notas que sean categoria "RECORDATORIO" y isEncrypted sea falso para luego al cerrar sesion encryptarlas
-    //I need to pass the secrey key, but not encrypted. (match secrey key with bicrypt)
+    // const userData = req.user;
 
-    // const sKeyDecrypted = await bycrypt.compare()
-
-    const notesToUpdate = await noteshemma.updateMany({categoria: 'CREDENCIALES', isEncrypted: false, id_user: mongoose.Types.ObjectId(userData._id)}, {isEncrypted: true, contenido: userData.key})
-    res.json(notesToUpdate);
+    // const notesToUpdate = await noteshemma.updateMany({categoria: 'CREDENCIALES', isEncrypted: false, id_user: mongoose.Types.ObjectId(userData._id)}, {isEncrypted: true, contenido: userData.key})
+    // res.json(notesToUpdate);
 
     req.logout( (err) => {
         if (err) { return next(err); }

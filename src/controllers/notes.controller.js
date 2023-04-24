@@ -159,14 +159,10 @@ const decryptNote = async (req, res) => {
 
     const note = await noteshemma.findOne({ _id: id });
 
-    // if (note.categoria == 'CREDENCIALES' && userData.key !== null) {
-    //     req.flash('error_msg', 'Esta nota no tiene contenido para desencriptar.');
-    //     return res.redirect('/notes');
-    // }
-
+    // console.log(sKey,userData.key, note.contenido)
 
     try {
-        const decryptedContent = await decrypt(sKey, userData.key, note.contenido);
+        const decryptedContent = decrypt(sKey, userData.key, note.contenido);
         await noteshemma.findByIdAndUpdate(id, { contenido: decryptedContent, isEncrypted: false });
         req.flash('success_msg', 'Nota desencriptada exitosamente.');
         return res.redirect('/notes');

@@ -1,7 +1,7 @@
 const userShemma = require('../models/Users');
 const calculateAge = require('../helpers/calculateAge');
 const bcrypt = require('bcrypt');
-const CryptoJS = require('crypto-js');
+const {encrypt, decrypt} = require('../config/crypto');
 const { format } = require('date-fns');
 
 const profileRender = async (req, res) => {
@@ -48,9 +48,8 @@ const addSecretKey = async (req, res) => {
         res.redirect('/profile');
     } else {
         try {
-            const salts = await bcrypt.genSalt(10);
-            const sKeyHashed = await bcrypt.hash(sKey, salts);
-            await userShemma.findByIdAndUpdate(userData._id, { key: sKeyHashed });
+            const sKeyEncrypted = encrypt(sKey, sKey);
+            await userShemma.findByIdAndUpdate(userData._id, { key: sKeyEncrypted });
             req.flash('success_msg', 'Tu llave fue existosamente creada, ahora puedes crear notas de categoria "credenciales".');
             res.redirect('/profile');
         } catch (e) {

@@ -52,7 +52,7 @@ const addNote = async (req, res) => {
                     id_user: req.user._id,
                     titulo: tittle,
                     categoria: formattedCategory,
-                    contenido: encrypt(content, userData.key),
+                    contenido: encrypt(content),
                     createdAt: format(currentDate, 'dd/MM/yyyy'),
                     updatedAt: format(currentDate, 'dd/MM/yyyy'),
                     isEncrypted: true
@@ -161,14 +161,16 @@ const decryptNote = async (req, res) => {
 
     // console.log(sKey,userData.key, note.contenido)
 
-    try {
-        const decryptedContent = decrypt(sKey, userData.key, note.contenido);
-        await noteshemma.findByIdAndUpdate(id, { contenido: decryptedContent, isEncrypted: false });
-        req.flash('success_msg', 'Nota desencriptada exitosamente.');
-        return res.redirect('/notes');
-    } catch (e) {
-        console.error(e);
-    }
+    // try {
+    //     const decryptedContent = decrypt(sKey, userData.key, note.contenido);
+    //     await noteshemma.findByIdAndUpdate(id, { contenido: decryptedContent, isEncrypted: false });
+    //     req.flash('success_msg', 'Nota desencriptada exitosamente.');
+    //     return res.redirect('/notes');
+    // } catch (e) {
+    //     console.error(e);
+    // }
+
+    decrypt(userData.key);
 }
 
 const logout = async (req, res) => {

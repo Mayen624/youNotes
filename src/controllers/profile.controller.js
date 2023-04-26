@@ -48,7 +48,7 @@ const addSecretKey = async (req, res) => {
         res.redirect('/profile');
     } else {
         try {
-            const sKeyEncrypted = encrypt(sKey, sKey);
+            const sKeyEncrypted = encrypt(sKey);
             await userShemma.findByIdAndUpdate(userData._id, { key: sKeyEncrypted });
             req.flash('success_msg', 'Tu llave fue existosamente creada, ahora puedes crear notas de categoria "credenciales".');
             res.redirect('/profile');

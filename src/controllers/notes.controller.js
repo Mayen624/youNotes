@@ -170,7 +170,8 @@ const decryptNote = async (req, res) => {
     //     console.error(e);
     // }
 
-    decrypt(userData.key);
+    const text = decrypt(userData.key);
+    console.log(text)
 }
 
 const logout = async (req, res) => {

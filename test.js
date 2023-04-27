@@ -1,33 +1,35 @@
 const crypto = require('crypto');
 
-const algorithm = 'aes-256-cbc'; //Algorithm for use
-const key = crypto.randomBytes(32); // key - a buffer of bytes that is unique
-const iv = crypto.randomBytes(16); // iv - another buffer of bytes that is unique
-const myKey = '9ae4882cbcd5fced3948838dc63d9015:e1ccdca620818d631f63186904d25c67'
+const algorithm = 'aes-256-cbc';
+const key = crypto.randomBytes(32);
+const iv = crypto.randomBytes(16);
 
-const encrypt = (sKey) => {
-
-    const cipher = crypto.createCipheriv(algorithm, key, iv);
-    const sKeyEncrypted = Buffer.concat([cipher.update(sKey), cipher.final()]);
-
-    return encryptedResult = iv.toString("hex") + ':' + sKeyEncrypted.toString("hex")
-
+function encrypt(sKey) {
+  const cipher = crypto.createCipheriv(algorithm, key, iv);
+  let encrypted = cipher.update(sKey, 'utf8', 'hex');
+  encrypted += cipher.final('hex');
+  console.log(encrypted.toString("hex"))
+  return `${iv.toString('hex')}:${encrypted.toString('hex')}`;
 }
 
-const decrypt = (sKeyEncrypted) => {
-
-    console.log(sKeyEncrypted)
-
-    const decryptedResult = sKeyEncrypted.trim().split(":");
-    const iv = Buffer.from(decryptedResult[0], "hex");
-    const encrypted = Buffer.from(decryptedResult[1], "hex");
-    const sKeyDecrypted = crypto.createDecipheriv(algorithm, key, iv);
-    return Buffer.concat([sKeyDecrypted.update(encrypted), sKeyDecrypted.final()]);
-
-
+function decrypt(sKeyEncrypted) {
+  const parts = sKeyEncrypted.split(':');
+  const sKeyDecrypted = crypto.createDecipheriv(algorithm, key, Buffer.from(parts[0], 'hex'));
+  let decrypted = sKeyDecrypted.update(parts[1], 'hex', 'utf8');
+  console.log(decrypted.toString("hex"))
+  decrypted += sKeyDecrypted.final('utf8').toString();
+  return decrypted;
 }
 
-console.log(decrypt(myKey))
+// Ejemplo de uso
+const originalText = 'c40adm1080';
+const encryptedText = encrypt(originalText);
+const decryptedText = decrypt(encryptedText);
+console.log(decryptedText)
+// console.log(`Texto original: ${originalText}`);
+// console.log(`Texto cifrado: ${encryptedText}`);
+// console.log('Texto de la db:' + 'a1b24f390a5642616060365202a1ede9:11bcfb44883282fd3ca8f8a928553b4f')
+// console.log(`Texto descifrado: ${decryptedText}`);
 
 
 

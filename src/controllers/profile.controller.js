@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const userShemma = require('../models/Users');
 const calculateAge = require('../helpers/calculateAge');
 const bcrypt = require('bcrypt');
@@ -48,7 +49,7 @@ const addSecretKey = async (req, res) => {
         res.redirect('/profile');
     } else {
         try {
-            const sKeyEncrypted = encrypt(sKey);
+            const sKeyEncrypted = encrypt(sKey, crypto.randomBytes(32));
             await userShemma.findByIdAndUpdate(userData._id, { key: sKeyEncrypted });
             req.flash('success_msg', 'Tu llave fue existosamente creada, ahora puedes crear notas de categoria "credenciales".');
             res.redirect('/profile');

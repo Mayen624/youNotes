@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const crypto = require('crypto');
 const { format } = require('date-fns');
 const noteshemma = require('../models/Notes');
 const categoryShemma = require('../models/Categories');
@@ -52,7 +52,7 @@ const addNote = async (req, res) => {
                     id_user: req.user._id,
                     titulo: tittle,
                     categoria: formattedCategory,
-                    contenido: encrypt(content),
+                    contenido: encrypt(content, crypto.randomBytes(32)),
                     createdAt: format(currentDate, 'dd/MM/yyyy'),
                     updatedAt: format(currentDate, 'dd/MM/yyyy'),
                     isEncrypted: true
@@ -159,25 +159,20 @@ const decryptNote = async (req, res) => {
 
     const note = await noteshemma.findOne({ _id: id });
 
-    // console.log(sKey,userData.key, note.contenido)
-
-    // try {
-    //     const decryptedContent = decrypt(sKey, userData.key, note.contenido);
-    //     await noteshemma.findByIdAndUpdate(id, { contenido: decryptedContent, isEncrypted: false });
-    //     req.flash('success_msg', 'Nota desencriptada exitosamente.');
-    //     return res.redirect('/notes');
-    // } catch (e) {
-    //     console.error(e);
-    // }
-
-    const text = decrypt(userData.key);
-    console.log(text)
+    try {
+        const decryptedContent = decrypt(note.contenido);
+        await noteshemma.findByIdAndUpdate(id, { contenido: decryptedContent, isEncrypted: false });
+        req.flash('success_msg', 'Nota desencriptada exitosamente.');
+        return res.redirect('/notes');
+    } catch (e) {
+        console.log(e)
+        req.flash('error_msg', e.message);
+        res.redirect('/notes')
+    }
 }
 
 const logout = async (req, res) => {
     req.logout();
-    req.flash('success_msg', 'Sesion cerada.');
-    res.redirect('/auth');
 }
 
 

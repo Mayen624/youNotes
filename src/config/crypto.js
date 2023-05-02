@@ -9,28 +9,37 @@ function encrypt(texto, key) {
   return `${iv.toString('hex')}:${textoCifrado}:${key.toString('hex')}`;
 }
 
-function decrypt(textoCifrado) {
+function decrypt(textoCifrado, clave) {
 
   const [ivHex, textoCifradoHex, claveHex] = textoCifrado.split(':');
   const iv = Buffer.from(ivHex, 'hex');
   const key = Buffer.from(claveHex, 'hex');
-  const descifrador = crypto.createDecipheriv(ALGORITMO, Buffer.from(key), iv);
+  const convertClave = Buffer.from(clave, 'hex')
 
-  try {
+  console.log(convertClave)
+  console.log(key)
+ 
 
-    let textoDescifrado = descifrador.update(textoCifradoHex, 'hex', 'utf8');
-    textoDescifrado += descifrador.final('utf8');
-    return textoDescifrado;
+  // try {
 
-  } catch (e) {
+  //   if(!convertClave.equals(key)){
+  //     throw new Error('llave incorrecta');
+  //   }
 
-    if (e.code === 'ERR_OSSL_BAD_DECRYPT') {
-      console.log(e)
-      throw new Error('Error al desencriptar, llave incorrecta');
+  //   const descifrador = crypto.createDecipheriv(ALGORITMO, Buffer.from(key), iv);
+  //   let textoDescifrado = descifrador.update(textoCifradoHex, 'hex', 'utf8');
+  //   textoDescifrado += descifrador.final('utf8');
+  //   return textoDescifrado;
 
-    }
+  // } catch (e) {
 
-  }
+  //   if (e.code === 'ERR_OSSL_BAD_DECRYPT') {
+  //     console.log(e)
+  //     throw new Error('Error al desencriptar, llave incorrecta');
+
+  //   }
+
+  // }
 }
 
 

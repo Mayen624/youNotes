@@ -1,4 +1,3 @@
-console.log('connected...');
 
 let btnRemove = document.querySelectorAll('#delete-btn');
 btnRemove.forEach(btn => {

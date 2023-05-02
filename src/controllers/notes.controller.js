@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const { format } = require('date-fns');
 const noteshemma = require('../models/Notes');
-const categoryShemma = require('../models/Categories');
+const {CATEGORIES} = require('../helpers/categoriesDictionary');
 const { encrypt, decrypt } = require('../config/crypto');
 
 let currentDate = new Date(); //Current date
@@ -19,7 +19,7 @@ const notesRender = async (req, res) => {
         filter = { id_user: userInfo._id };
     }
 
-    const notes = await noteshemma.find(filter); //Notes of user
+    const notes = await noteshemma.find(filter).sort({categoria: -1}); //Notes of user
     res.render('../views/layouts/notes', { layout: 'notes.hbs', notes, userName: userInfo.user, userInfo });
 }
 
@@ -33,7 +33,7 @@ const addNote = async (req, res) => {
     const formattedCategory = category.toUpperCase();
 
     if (tittle == "" || category == "" || content == "") {
-        req.flash('error_msg', ' Todos los datos son requeridos.');
+        req.flash('error_msg', ' Todos los campos son obligatorios.');
         return res.redirect('/notes');
     }
 
@@ -44,7 +44,7 @@ const addNote = async (req, res) => {
 
     //ENCRYPT CONTENT IF CATEGORY IS CREDENTIALS AND KEY ISN'T NULL
 
-    if (formattedCategory == 'CREDENCIALES') {
+    if (formattedCategory == CATEGORIES.CREDENTIALS) {
 
         if (userData.key !== null) {
             try {
@@ -114,7 +114,7 @@ const editNotes = async (req, res) => {
         errors.push('Los datos no pueden ser los mismos.');
     }
 
-    if (userData.key === null && formattedCategory == 'CREDENCIALES') {
+    if (userData.key === null && formattedCategory == CATEGORIES.CREDENTIALS) {
         errors.push('Debes crear una llave de seguridad para poder crear notas de tipo "credenciales". Puedes crearla en la configuracion de tu perfil.');
     }
 
@@ -160,10 +160,11 @@ const decryptNote = async (req, res) => {
     const note = await noteshemma.findOne({ _id: id });
 
     try {
-        const decryptedContent = decrypt(note.contenido);
-        await noteshemma.findByIdAndUpdate(id, { contenido: decryptedContent, isEncrypted: false });
-        req.flash('success_msg', 'Nota desencriptada exitosamente.');
-        return res.redirect('/notes');
+        const decryptedContent = decrypt(note.contenido, sKey);
+        console.log(decryptedContent)
+        // await noteshemma.findByIdAndUpdate(id, { contenido: decryptedContent, isEncrypted: false });
+        // req.flash('success_msg', 'Nota desencriptada exitosamente.');
+        // return res.redirect('/notes');
     } catch (e) {
         console.log(e)
         req.flash('error_msg', e.message);

@@ -64,6 +64,12 @@ body{
     padding-right: 25px;
 }
 
+#blocked{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
 @media (max-width: 990px) {
     #centerIsResponsive {
       text-align: center;

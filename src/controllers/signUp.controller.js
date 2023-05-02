@@ -13,7 +13,7 @@ const addUser = async (req, res) => {
     const passwordRegexr = /^(?=(.*[\d]){2,})(?=(.*[a-z]){2,})(?=(.*[A-Z]){1,})(?=(.*[@#$%!]){1,})(?:[\da-zA-Z@#$%!.]){8,100}$/;
 
     //Data came from req post
-    const { User, names, work, age, sex, Email, Password, confirmPass } = req.body;
+    const { User, names, age, Email, Password, confirmPass } = req.body;
 
     //Fields validation
     if (!User || !names || !Email || !Password || !confirmPass) {
@@ -38,8 +38,8 @@ const addUser = async (req, res) => {
     }
 
     //User validation
-    if (User.length < 4) {
-        errors.push({ message: 'Usuario debe ser mayor a cuatro caracteres.' });
+    if (User.length < 8) {
+        errors.push({ message: 'Usuario debe ser mayor a ocho caracteres.' });
     }
 
     const userRepeat = await newUserShemma.find({ user: User });

@@ -16,12 +16,6 @@ keyBtn.addEventListener('click', (e) => {
     keyInput.value = key;
 })
 
-
-btnsKey.addEventListener('click', (e) => {
-    sKey = keyInput.value;
-    localStorage.setItem('sKey', sKey);
-})
-
 setTimeout(() => {
     document.getElementById('alerts').style.display = 'none';
 }, 15000)

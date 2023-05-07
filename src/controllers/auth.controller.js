@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const noteshemma = require('../models/Notes');
 const { encrypt, decrypt } = require('../config/crypto');
+const dotenv = require('dotenv');
+dotenv.config()
 
 const renderIndexForm = async (req, res) => {
     res.render('../views/index');
@@ -20,7 +22,6 @@ const logout = async (req, res) => {
 
     const userData = req.user;
     const idUser = userData._id;
-    const key = crypto.randomBytes(32);
 
     try {
         // Buscamos todas las notas del usuario que estén desencriptadas
@@ -28,7 +29,7 @@ const logout = async (req, res) => {
         // Iteramos sobre cada nota desencriptada
         for (let nota of unencryptedNotes) {
             // Encriptamos el contenido de la nota
-            const encryptedContent = encrypt(nota.contenido, key);
+            const encryptedContent = encrypt(nota.contenido, process.env.KEY);
             // Actualizamos la nota con el contenido encriptado
             await noteshemma.updateMany({ _id: nota._id }, { contenido: encryptedContent, isEncrypted: true });
         }

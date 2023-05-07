@@ -1,47 +1,39 @@
+const { generateHash, compareHash } = require('../config/bycrypt');
 const crypto = require('crypto');
 const ALGORITMO = 'aes-256-cbc';
 
-function encrypt(texto, key) {
+const encrypt = (texto, key) => {
   const iv = crypto.randomBytes(16);
-  const cifrador = crypto.createCipheriv(ALGORITMO, Buffer.from(key), iv);
+  const rKey = Buffer.alloc(32, key);
+  const cifrador = crypto.createCipheriv(ALGORITMO, rKey, iv);
   let textoCifrado = cifrador.update(texto, 'utf8', 'hex');
   textoCifrado += cifrador.final('hex');
-  return `${iv.toString('hex')}:${textoCifrado}:${key.toString('hex')}`;
+  return `${iv.toString('hex')}:${textoCifrado}:${rKey.toString('hex')}`;
 }
 
-function decrypt(textoCifrado, clave) {
 
-  const [ivHex, textoCifradoHex, claveHex] = textoCifrado.split(':');
+const decrypt = async (textoCifrado, passedKey, hashedKey) => {
+  const [ivHex, textoCifradoHex, sKeyHex] = textoCifrado.split(':');
   const iv = Buffer.from(ivHex, 'hex');
-  const key = Buffer.from(claveHex, 'hex');
-  const convertClave = Buffer.from(clave, 'hex')
+  const sKey = Buffer.from(sKeyHex, 'hex')
+  const match = await compareHash(passedKey, hashedKey);
 
-  console.log(convertClave)
-  console.log(key)
- 
+  if (match) {
+    const descifrador = crypto.createDecipheriv(ALGORITMO, Buffer.from(sKey), iv);
+    let textoDescifrado = descifrador.update(textoCifradoHex, 'hex', 'utf8');
+    textoDescifrado += descifrador.final('utf8');
+    return textoDescifrado;
+  } else {
+    throw new Error('Llave incorrecta, intentelo de nuevo.')
+  }
 
-  // try {
 
-  //   if(!convertClave.equals(key)){
-  //     throw new Error('llave incorrecta');
-  //   }
+}
 
-  //   const descifrador = crypto.createDecipheriv(ALGORITMO, Buffer.from(key), iv);
-  //   let textoDescifrado = descifrador.update(textoCifradoHex, 'hex', 'utf8');
-  //   textoDescifrado += descifrador.final('utf8');
-  //   return textoDescifrado;
-
-  // } catch (e) {
-
-  //   if (e.code === 'ERR_OSSL_BAD_DECRYPT') {
-  //     console.log(e)
-  //     throw new Error('Error al desencriptar, llave incorrecta');
-
-  //   }
-
-  // }
+const createBUffer = (text) => {
+  return Buffer.alloc(32, text)
 }
 
 
 
-module.exports = { encrypt, decrypt };
+module.exports = { encrypt, decrypt, createBUffer };

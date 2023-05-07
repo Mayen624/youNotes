@@ -1,8 +1,10 @@
 const crypto = require('crypto');
 const { format } = require('date-fns');
 const noteshemma = require('../models/Notes');
-const {CATEGORIES} = require('../helpers/categoriesDictionary');
-const { encrypt, decrypt } = require('../config/crypto');
+const { CATEGORIES } = require('../helpers/categoriesDictionary');
+const { encrypt, decrypt, createBUffer } = require('../config/crypto');
+const dotenv = require('dotenv');
+dotenv.config()
 
 let currentDate = new Date(); //Current date
 
@@ -19,7 +21,7 @@ const notesRender = async (req, res) => {
         filter = { id_user: userInfo._id };
     }
 
-    const notes = await noteshemma.find(filter).sort({categoria: -1}); //Notes of user
+    const notes = await noteshemma.find(filter).sort({ categoria: -1 }); //Notes of user
     res.render('../views/layouts/notes', { layout: 'notes.hbs', notes, userName: userInfo.user, userInfo });
 }
 
@@ -47,12 +49,13 @@ const addNote = async (req, res) => {
     if (formattedCategory == CATEGORIES.CREDENTIALS) {
 
         if (userData.key !== null) {
+
             try {
                 const newNote = new noteshemma({
                     id_user: req.user._id,
                     titulo: tittle,
                     categoria: formattedCategory,
-                    contenido: encrypt(content, crypto.randomBytes(32)),
+                    contenido: encrypt(content, process.env.KEY),
                     createdAt: format(currentDate, 'dd/MM/yyyy'),
                     updatedAt: format(currentDate, 'dd/MM/yyyy'),
                     isEncrypted: true
@@ -160,15 +163,13 @@ const decryptNote = async (req, res) => {
     const note = await noteshemma.findOne({ _id: id });
 
     try {
-        const decryptedContent = decrypt(note.contenido, sKey);
-        console.log(decryptedContent)
-        // await noteshemma.findByIdAndUpdate(id, { contenido: decryptedContent, isEncrypted: false });
-        // req.flash('success_msg', 'Nota desencriptada exitosamente.');
-        // return res.redirect('/notes');
+        const decryptedContent = await decrypt(note.contenido, sKey, userData.key);
+        await noteshemma.findByIdAndUpdate(id, { contenido: decryptedContent, isEncrypted: false });
+        req.flash('success_msg', 'Nota desencriptada exitosamente.');
+        return res.redirect('/notes');
     } catch (e) {
-        console.log(e)
         req.flash('error_msg', e.message);
-        res.redirect('/notes')
+        return res.redirect('/notes')
     }
 }
 

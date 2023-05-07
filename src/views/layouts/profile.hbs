@@ -14,7 +14,7 @@
 <body>
     {{>mainNavBar}}
 
-    <section class="vh-100" style="background-color: #9de2ff;">
+    <section id="main" class="vh-100" style="background-color: #9de2ff;">
 
         {{#if success_msg}}
         <div id="alerts" class="container">
@@ -42,20 +42,21 @@
         {{/if}}
 
         <div class="container h-50">
-            <div class="row d-flex justify-content-center align-items-center h-100">
+            <div id="ctn-card" class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col col-md-9 col-lg-7 col-xl-5">
                     <div class="card" style="border-radius: 15px;">
                         <div class="card-body p-4">
                             <div class="d-flex text-black">
                                 <div class="flex-shrink-0">
-                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
+                                    <img id="img"
+                                        src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
                                         alt="Generic placeholder image" class="img-fluid"
                                         style="width: 180px; border-radius: 10px;">
                                 </div>
-                                <div class="flex-grow-1 ms-3">
+                                <div id="text-cont" class="flex-grow-1 ms-3">
                                     <h5 class="mb-1">{{userInfo.names}}</h5>
                                     <p class="mb-2 pb-1" style="color: #2b2a2a;">{{userInfo.work}}</p>
-                                    <div class="d-flex justify-content-start rounded-3 p-2 mb-2"
+                                    <div id="info-cont" class="d-flex justify-content-start rounded-3 p-2 mb-2"
                                         style="background-color: #efefef;">
                                         <div>
                                             <p class="small text-muted mb-1">Sexo</p>
@@ -71,11 +72,12 @@
                                         </div>
                                     </div>
                                     <div class="d-flex pt-1">
-                                        <button type="button" class="btn btn-outline-secondary me-1 flex-grow-1"
+                                        <button id="btn-key" type="button" class="btn btn-outline-secondary me-1 flex-grow-1"
                                             data-bs-toggle="modal" data-bs-target="#addKey">Secret key
                                         </button>
-                                        <button type="button" class="btn btn-dark flex-grow-1" data-bs-toggle="modal"
-                                            data-bs-target="#editProfile">Edit profile</button>
+                                        <button id="btn-editProfile" type="button" class="btn btn-dark flex-grow-1" data-bs-toggle="modal"
+                                            data-bs-target="#editProfile">Edit profile
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -89,7 +91,7 @@
     {{>addSecretKeyForm}}
     {{>editProfileForm}}
     {{>footer}}
-    
+
     <script src="/js/bootstrap.bundle.min.js"></script>
     <script src="/public/scripts/profile.js"></script>
 </body>

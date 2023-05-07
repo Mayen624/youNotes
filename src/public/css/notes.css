@@ -29,8 +29,9 @@ body{
     margin-bottom:10px
 }
 
-.addNote{
-    width:200px;
+#btnAdd{
+    width: 200px;
+    margin-right: 10px;
 }
 
 .notes{
@@ -80,11 +81,13 @@ body{
         text-align: center;
     }
 
-    #plus-icon{
-        display: none;
-    }
-
     #navbarNav{
         padding-right: 0;
+    }
+
+    #btnAdd{
+        width: 50%;
+        font-size: 11px;
+        margin-right: 10px;
     }
 }

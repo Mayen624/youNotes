@@ -3,8 +3,7 @@ body{
     margin: 0;
     display: flex;
     font-size: 15px;
-    max-height:100vh;
-    overflow-x: hidden;
+    max-height: 100vh;
     flex-direction:column; 
 }
 
@@ -78,6 +77,39 @@ body{
 
     #navbarNav{
         padding-right: 0;
+    }
+
+    #ctn-card{
+      margin-top: 40px;
+    }
+
+    #main{
+      overflow: hidden;
+    }
+
+    #img{
+      width: 70px !important;
+    }
+
+    #text-cont{
+      font-size: 10px;
+    }
+
+    #info-cont{
+      width: auto;
+      gap: 10px;
+    }
+
+    #btn-key{
+      width: auto;
+      font-size: 10px;
+      padding: 5px;
+    }
+
+    #btn-editProfile{
+      width: auto;
+      font-size: 10px;
+      padding: 5px;
     }
 }
 

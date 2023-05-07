@@ -1,3 +1,23 @@
+<div class="box mt-4">
+  <div class="divisor">
+
+    <div class="container-fluid" style="">
+      <form class="d-flex" action="/notes?" method="GET">
+        <div class="input-group">
+          <input class="form-control me-2" name="filtro" placeholder="Buscar nota por nombre de categoria..."
+            aria-label="Search">
+          <button id="btn-search" class="input-group-text"><i class="bi bi-search"></i></button>
+        </div>
+      </form>
+    </div>
+
+    <button id="btnAdd" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNote">
+      Nueva nota
+    </button>
+
+  </div>
+</div>
+
 {{#if success_msg}}
 <div id="alerts" style="margin: 0px 20px 0px 20px;">
   <div class="alert alert-success d-flex align-items-center alert-dismissible fade show mt-3" role="alert">
@@ -21,28 +41,6 @@
   </div>
 </div>
 {{/if}}
-
-<div class="box mt-4">
-  <div class="divisor">
-
-    <div class="container-fluid" style="">
-      <form class="d-flex" action="/notes?" method="GET">
-        <div class="input-group">
-          <input class="form-control me-2" name="filtro" placeholder="Buscar nota por nombre de categoria..."
-            aria-label="Search">
-          <button id="btn-search" class="input-group-text"><i class="bi bi-search"></i></button>
-        </div>
-      </form>
-    </div>
-
-    <div class="addNote">
-      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addNote">
-        Nueva nota <i id="plus-icon" class="bi bi-plus"></i>
-      </button>
-    </div>
-
-  </div>
-</div>
 
 
 {{#if notes}}

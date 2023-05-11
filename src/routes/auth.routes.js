@@ -10,6 +10,11 @@ router.get('/', indexController.renderIndexForm);
 //User Auth
 router.post('/', indexController.auth);
 
+//Log out the user from the system
 router.get('/logout', indexController.logout);
+
+router.get('/forgot_password', indexController.renderForgotPassword);
+
+router.post('/new_password', indexController.newPassword)
 
 module.exports = router;

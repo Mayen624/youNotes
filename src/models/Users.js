@@ -11,7 +11,7 @@ const newUserShemma = new Schema({
     key     : {type: String, default: null},
     email   : {type: String, unique: true, require: true},
     password: {type: String},
-    image   : {type: String, default: null},
+    image   : {type: Object, default: null},
     enabled : {type: Boolean}
 
 }, {

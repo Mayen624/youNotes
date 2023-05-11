@@ -14,7 +14,7 @@ passport.use(new LocalStrategy({
         return done(null, false, { message: 'Usuario no encontrado.' });
     } else {
         if (!user.enabled === false) {
-            return done(null, false, { message: 'Este usuario esta deshabilitado o no ha finalizado la confirmacion de su cuenta por correo.' });
+            return done(null, false, { message: 'Este usuario esta deshabilitado o no ha finalizado la verificación de su cuenta por correo.' });
         }
 
         const match = await user.matchPassword(password);

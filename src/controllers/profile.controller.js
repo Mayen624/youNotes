@@ -1,7 +1,7 @@
-const {generateHash} = require('../config/bycrypt');
+const { generateHash } = require('../config/bycrypt');
 const userShemma = require('../models/Users');
 const calculateAge = require('../helpers/calculateAge');
-const {encrypt, decrypt} = require('../config/crypto');
+const { encrypt, decrypt } = require('../config/crypto');
 const { format } = require('date-fns');
 const dotenv = require('dotenv');
 dotenv.config()
@@ -12,16 +12,19 @@ const profileRender = async (req, res) => {
 }
 
 const editProfile = async (req, res) => {
+
+    //console.log(req.file);
+
     const userData = req.user;
-    const { id, names, work, sex, age, img } = req.body;
+    const { id, names, work, sex, age } = req.body;
     const formattedAge = calculateAge(age);
 
-    if (!id || !names || !work || !sex || !age || !img) {
+    if (!id || !names || !work || !sex || !age) {
         req.flash('error_msg', 'Todos los campos son requeridos.');
         return res.redirect('/profile');
     }
 
-    if(formattedAge <= 8){
+    if (formattedAge <= 8) {
         req.flash('error_msg', 'Debes ser mayor a 8 años.');
         return res.redirect('/profile');
     }
@@ -32,11 +35,27 @@ const editProfile = async (req, res) => {
     }
 
     try {
-        await userShemma.findByIdAndUpdate(id, { names: names, work: work, sex: sex, age: formattedAge });
-        req.flash('success_msg', 'Tus datos han sido actualizados.');
-        return res.redirect('/profile');
-    } catch (err) {
-        console.error(err);
+        if(req.uploadError){
+            req.flash('error_msg', req.uploadError.message);
+            return res.redirect('/profile');
+        }else{
+            await userShemma.findByIdAndUpdate(
+                id,
+                {
+                    names: names, work: work, sex: sex, age: formattedAge,
+                    image: {
+                        name: req.file == undefined || null ? 'User.jpg' : req.file.filename,
+                        orgName: req.file == undefined || null ? 'User.jpg' : req.file.originalname,
+                        size: req.file == undefined || null ? 7023 : req.file.size
+                    }
+                }
+    
+            );
+            req.flash('success_msg', 'Tus datos han sido actualizados.');
+            return res.redirect('/profile');
+        }
+    } catch (e) {
+        console.log(e)
     }
 
 }

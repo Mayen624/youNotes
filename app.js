@@ -4,8 +4,10 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
 const express = require('express');
-const morgan = require('morgan')
+const morgan = require('morgan');
+const multer = require('multer');
 const dotenv = require('dotenv');
+const sharp = require('sharp');
 const path = require('path');
 const app = express();
 
@@ -50,7 +52,35 @@ app.use((req, res, next) => {
     res.locals.error = req.flash("error");
     res.locals.user = req.user || null;
     next();
-})
+});
+
+//Multer
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, 'src/uploads'));
+    },
+    filename: (req, file, cb, filename) => {
+        const ext = file.originalname.split('.').pop();
+        cb(null, `${Date.now()}.${ext}`);
+    }
+});
+
+app.use(multer({
+    storage,
+    fileFilter: function (req, file, cb) {
+        const filetypes = /jpeg|jpg|png|gif/;
+        const mimetype = filetypes.test(file.mimetype);
+        const extname = filetypes.test(path.extname(file.originalname));
+
+        if (mimetype && extname) {
+            return cb(null, true);
+        }
+        
+        req.uploadError = new Error('Formato de imagen no permitida. Formatos validos: jpeg, jpg, png, gif.');
+        cb(null, false);
+
+    }
+}).single('img'));
 
 //Static files
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
@@ -58,6 +88,7 @@ app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js'));
 app.use('/bi', express.static(__dirname + '/node_modules/bootstrap-icons'));
 app.use('/images', express.static(__dirname + '/src/public/images'));
 app.use('/public', express.static(__dirname + '/src/public'));
+app.use('/uploads', express.static(__dirname + '/src/uploads'));
 
 //Routes
 const indexRoutes = require('./src/routes/auth.routes');

@@ -1,7 +1,6 @@
-const crypto = require('crypto');
-const mongoose = require('mongoose');
 const passport = require('passport');
 const noteshemma = require('../models/Notes');
+const userShemma = require('../models/Users');
 const { encrypt, decrypt } = require('../config/crypto');
 const dotenv = require('dotenv');
 dotenv.config()
@@ -46,4 +45,31 @@ const logout = async (req, res) => {
 
 }
 
-module.exports = { renderIndexForm, auth, logout }
+const renderForgotPassword = async (req,res) => {    
+    res.render('../views/partials/forgotPasswordForm');
+}
+
+const newPassword = async (req,res) => {
+    // first step found the username of user
+    // then create a token for save it in the user info
+    // after that check for existing token in the user data
+    // then
+
+    const {email} = req.body;
+
+    if(!email){
+        req.flash('error_msg', 'Correo electronico requerido.');
+        return res.redirect('/auth/forgot_password');
+    }
+
+    const existingEmail = await userShemma.findOne({email: email});
+
+    if(!existingEmail){
+        req.flash('error_msg', 'Este correo no esta registrado.');
+        return res.redirect('/auth/forgot_password');
+    }
+
+    console.log(existingEmail)
+}
+
+module.exports = { renderIndexForm, auth, renderForgotPassword, newPassword, logout }

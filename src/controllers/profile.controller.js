@@ -35,10 +35,10 @@ const editProfile = async (req, res) => {
     }
 
     try {
-        if(req.uploadError){
+        if (req.uploadError) {
             req.flash('error_msg', req.uploadError.message);
             return res.redirect('/profile');
-        }else{
+        } else {
             await userShemma.findByIdAndUpdate(
                 id,
                 {
@@ -49,7 +49,7 @@ const editProfile = async (req, res) => {
                         size: req.file == undefined || null ? 7023 : req.file.size
                     }
                 }
-    
+
             );
             req.flash('success_msg', 'Tus datos han sido actualizados.');
             return res.redirect('/profile');
@@ -80,7 +80,7 @@ const addSecretKey = async (req, res) => {
 }
 
 const forgotSecretKey = async (req, res) => {
-
+    
 }
 
 module.exports = { profileRender, editProfile, addSecretKey, forgotSecretKey }

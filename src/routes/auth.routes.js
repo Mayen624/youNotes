@@ -15,6 +15,6 @@ router.get('/logout', indexController.logout);
 
 router.get('/forgot_password', indexController.renderForgotPassword);
 
-router.post('/new_password', indexController.newPassword)
+router.post('/forgot_password', indexController.forgotPassword)
 
 module.exports = router;

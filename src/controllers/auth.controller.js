@@ -2,7 +2,9 @@ const passport = require('passport');
 const noteshemma = require('../models/Notes');
 const userShemma = require('../models/Users');
 const { encrypt, decrypt } = require('../config/crypto');
+const { transporter } = require('../config/nodemailer');
 const dotenv = require('dotenv');
+const nodemailer = require('nodemailer');
 dotenv.config()
 
 const renderIndexForm = async (req, res) => {
@@ -45,31 +47,48 @@ const logout = async (req, res) => {
 
 }
 
-const renderForgotPassword = async (req,res) => {    
+const renderForgotPassword = async (req, res) => {
     res.render('../views/partials/forgotPasswordForm');
 }
 
-const newPassword = async (req,res) => {
+const forgotPassword = async (req, res) => {
     // first step found the username of user
     // then create a token for save it in the user info
     // after that check for existing token in the user data
     // then
 
-    const {email} = req.body;
+    const { email } = req.body;
 
-    if(!email){
+    if (!email) {
         req.flash('error_msg', 'Correo electronico requerido.');
         return res.redirect('/auth/forgot_password');
     }
 
-    const existingEmail = await userShemma.findOne({email: email});
+    const existingEmail = await userShemma.findOne({ email: email });
 
-    if(!existingEmail){
+    if (!existingEmail) {
         req.flash('error_msg', 'Este correo no esta registrado.');
         return res.redirect('/auth/forgot_password');
     }
 
-    console.log(existingEmail)
+    try {
+        await transporter.sendMail({
+            from: '"Forgot password - youNotes" <mayen624.dev@gmail.com>', // sender address
+            to: email, // list of receivers
+            subject: "you Notes ✔", // Subject line
+            html: `
+                <b>Please click in the following link to change your password:</b>
+                <a href="localhost:3000/auth/newPassword">localhost:3000/auth/newPassword</a>
+            `
+        });
+
+        res.json({
+            status: 'ok',
+            message: 'Please check your email'
+        })
+    } catch (e) {
+        console.log(e)
+    }
 }
 
-module.exports = { renderIndexForm, auth, renderForgotPassword, newPassword, logout }
+module.exports = { renderIndexForm, auth, renderForgotPassword, forgotPassword, logout }

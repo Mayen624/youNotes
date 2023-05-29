@@ -3,16 +3,17 @@ const bycrypt = require('bcrypt');
 const {Schema, model} = mongoose;
 
 const newUserShemma = new Schema({
-    user    : {type: String, unique: true, require: true},
-    names   : {type: String},
-    work    : {type: String, default: null},
-    sex     : {type: String, default: null},
-    age     : {type: String, default: null},
-    key     : {type: String, default: null},
-    email   : {type: String, unique: true, require: true},
-    password: {type: String},
-    image   : {type: Object, default: null},
-    enabled : {type: Boolean}
+    user        : {type: String, unique: true, require: true},
+    names       : {type: String},
+    work        : {type: String, default: null},
+    sex         : {type: String, default: null},
+    age         : {type: String, default: null},
+    key         : {type: String, default: null},
+    email       : {type: String, unique: true, require: true},
+    password    : {type: String},
+    image       : {type: Object, default: null},
+    enabled     : {type: Boolean},
+    reset_token : {type: String, default: null}
 
 }, {
     timestamps: true

@@ -5,6 +5,7 @@ const { encrypt, decrypt } = require('../config/crypto');
 const { transporter } = require('../config/nodemailer');
 const dotenv = require('dotenv');
 const nodemailer = require('nodemailer');
+const jws = require('jsonwebtoken');
 dotenv.config()
 
 const renderIndexForm = async (req, res) => {
@@ -64,28 +65,42 @@ const forgotPassword = async (req, res) => {
         return res.redirect('/auth/forgot_password');
     }
 
-    const existingEmail = await userShemma.findOne({ email: email });
+    const userInfo = await userShemma.findOne({ email: email });
 
-    if (!existingEmail) {
+    if (!userInfo) {
         req.flash('error_msg', 'Este correo no esta registrado.');
         return res.redirect('/auth/forgot_password');
     }
 
     try {
+        //Create and get the reset token
+        const token = jws.sign({id: userInfo._id}, process.ENV.KEY);
+        console.log(token)
+        
         await transporter.sendMail({
             from: '"Forgot password - youNotes" <mayen624.dev@gmail.com>', // sender address
             to: email, // list of receivers
-            subject: "you Notes ✔", // Subject line
+            subject: "youNotes ✔", // Subject line
             html: `
-                <b>Please click in the following link to change your password:</b>
-                <a href="localhost:3000/auth/newPassword">localhost:3000/auth/newPassword</a>
+                <h1>Español</h1>
+                <b>Aviso:</b>
+                <p>Este es un correo generado outomaticamente, porfavor no responder este correo. Si cree que este correo es un error favor de eliminarlo.</p>
+                <br>
+                <b>Para cambiar tu contraseña haga click en el siguiente link:</b>
+                <a href="https://localhost:3000/auth/newPassword">Cambia tu contraseña aqui</a>
+                <br>
+                <br>
+                <h1>English</h1>
+                <b>Warning:</b>
+                <p>This is a auto generated email, please don't reply to this email. If you think this email is a error please delete it.</p>
+                <br>
+                <b>To change you password make click in the following link:</b>
+                <a href="https://localhost:3000/auth/newPassword">Change your password here</a>
             `
         });
 
-        res.json({
-            status: 'ok',
-            message: 'Please check your email'
-        })
+        req.flash('success_msg', 'Revisa tu correo electronico, es posible que el correo este en la seccion de spam, trash o unwanted.');
+        return res.redirect('/auth/forgot_password');
     } catch (e) {
         console.log(e)
     }

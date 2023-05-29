@@ -74,7 +74,8 @@ const forgotPassword = async (req, res) => {
 
     try {
         //Create and get the reset token
-        const token = jws.sign({id: userInfo._id}, process.ENV.KEY);
+        const token = jws.sign({id: userInfo._id, expireIn: '10m'}, process.env.KEY);
+        await userShemma.updateOne({_id: userInfo._id, reset_token: token});
         console.log(token)
         
         await transporter.sendMail({
@@ -84,18 +85,18 @@ const forgotPassword = async (req, res) => {
             html: `
                 <h1>Español</h1>
                 <b>Aviso:</b>
-                <p>Este es un correo generado outomaticamente, porfavor no responder este correo. Si cree que este correo es un error favor de eliminarlo.</p>
+                <p>Este es un correo generado outomaticamente, porfavor no responder este correo. Si cree que este correo es un error, favor de eliminarlo.</p>
                 <br>
                 <b>Para cambiar tu contraseña haga click en el siguiente link:</b>
-                <a href="https://localhost:3000/auth/newPassword">Cambia tu contraseña aqui</a>
+                <a href="https://localhost:3000/auth/new_password/token/${token}">Cambia tu contraseña aqui</a>
                 <br>
                 <br>
                 <h1>English</h1>
                 <b>Warning:</b>
-                <p>This is a auto generated email, please don't reply to this email. If you think this email is a error please delete it.</p>
+                <p>This is a auto generated email, please don't reply to this email. If you think this email is a error, please delete it.</p>
                 <br>
                 <b>To change you password make click in the following link:</b>
-                <a href="https://localhost:3000/auth/newPassword">Change your password here</a>
+                <a href="https://localhost:3000/auth/new_password/token/${token}">Change your password here</a>
             `
         });
 
@@ -106,4 +107,11 @@ const forgotPassword = async (req, res) => {
     }
 }
 
-module.exports = { renderIndexForm, auth, renderForgotPassword, forgotPassword, logout }
+
+const createNewPassword = async (req,res) => {
+    const {token} = req.params;
+    //renderisar render pass form
+    console.log(token)
+}
+
+module.exports = { renderIndexForm, auth, renderForgotPassword, forgotPassword, createNewPassword, logout }

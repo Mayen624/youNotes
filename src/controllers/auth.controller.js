@@ -5,7 +5,7 @@ const { encrypt, decrypt } = require('../config/crypto');
 const { transporter } = require('../config/nodemailer');
 const dotenv = require('dotenv');
 const nodemailer = require('nodemailer');
-const jws = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 dotenv.config()
 
 const renderIndexForm = async (req, res) => {
@@ -53,10 +53,6 @@ const renderForgotPassword = async (req, res) => {
 }
 
 const forgotPassword = async (req, res) => {
-    // first step found the username of user
-    // then create a token for save it in the user info
-    // after that check for existing token in the user data
-    // then
 
     const { email } = req.body;
 
@@ -74,10 +70,10 @@ const forgotPassword = async (req, res) => {
 
     try {
         //Create and get the reset token
-        const token = jws.sign({id: userInfo._id, expireIn: '10m'}, process.env.KEY);
-        await userShemma.updateOne({_id: userInfo._id, reset_token: token});
+        const token = jws.sign({ id: userInfo._id, expireIn: '10m' }, process.env.KEY);
+        await userShemma.updateOne({ _id: userInfo._id, reset_token: token });
         console.log(token)
-        
+
         await transporter.sendMail({
             from: '"Forgot password - youNotes" <mayen624.dev@gmail.com>', // sender address
             to: email, // list of receivers
@@ -88,7 +84,7 @@ const forgotPassword = async (req, res) => {
                 <p>Este es un correo generado outomaticamente, porfavor no responder este correo. Si cree que este correo es un error, favor de eliminarlo.</p>
                 <br>
                 <b>Para cambiar tu contraseña haga click en el siguiente link:</b>
-                <a href="https://localhost:3000/auth/new_password/token/${token}">Cambia tu contraseña aqui</a>
+                <a href="http://localhost:3000/auth/new_password/${token}">Cambia tu contraseña aqui</a>
                 <br>
                 <br>
                 <h1>English</h1>
@@ -96,7 +92,7 @@ const forgotPassword = async (req, res) => {
                 <p>This is a auto generated email, please don't reply to this email. If you think this email is a error, please delete it.</p>
                 <br>
                 <b>To change you password make click in the following link:</b>
-                <a href="https://localhost:3000/auth/new_password/token/${token}">Change your password here</a>
+                <a href="http://localhost:3000/auth/new_password/${token}">Change your password here</a>
             `
         });
 
@@ -108,10 +104,26 @@ const forgotPassword = async (req, res) => {
 }
 
 
-const createNewPassword = async (req,res) => {
-    const {token} = req.params;
-    //renderisar render pass form
-    console.log(token)
-}
+const createNewPassword = async (req, res) => {
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    const { token } = req.params;
+
+    if (!token) {
+        req.flash('error_msg', '¡Falta el token!');
+        return res.redirect('/auth/forgot_password');
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.key);
+
+        res.render('../views/partials/changePasswordForm');
+
+        
+    } catch (err) {
+        console.log(err);
+        req.flash('error_msg', err.message);
+        return res.redirect('/auth/forgot_password');
+    }
+};
 
 module.exports = { renderIndexForm, auth, renderForgotPassword, forgotPassword, createNewPassword, logout }

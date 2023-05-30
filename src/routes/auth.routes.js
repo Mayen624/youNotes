@@ -17,6 +17,8 @@ router.get('/forgot_password', indexController.renderForgotPassword);
 
 router.post('/forgot_password', indexController.forgotPassword);
 
-router.get('/new_password/:token/', indexController.createNewPassword);
+router.get('/new_password/:token', indexController.renderCreateNewPassword);
+
+router.post('/new_password', indexController.createNewPassword);
 
 module.exports = router;

@@ -4,7 +4,7 @@ const userShemma = require('../models/Users');
 const { encrypt, decrypt } = require('../config/crypto');
 const { transporter } = require('../config/nodemailer');
 const dotenv = require('dotenv');
-const nodemailer = require('nodemailer');
+const bycrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 dotenv.config()
 
@@ -70,8 +70,8 @@ const forgotPassword = async (req, res) => {
 
     try {
         //Create and get the reset token
-        const token = jws.sign({ id: userInfo._id, expireIn: '10m' }, process.env.KEY);
-        await userShemma.updateOne({ _id: userInfo._id, reset_token: token });
+        const token = jwt.sign({id: userInfo._id},  process.env.KEY, { expiresIn: '600s' });
+        await userShemma.updateOne({_id: userInfo._id, reset_token: token})
         console.log(token)
 
         await transporter.sendMail({
@@ -104,8 +104,7 @@ const forgotPassword = async (req, res) => {
 }
 
 
-const createNewPassword = async (req, res) => {
-    const currentTimestamp = Math.floor(Date.now() / 1000);
+const renderCreateNewPassword = async (req, res) => {
     const { token } = req.params;
 
     if (!token) {
@@ -114,16 +113,68 @@ const createNewPassword = async (req, res) => {
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.key);
 
-        res.render('../views/partials/changePasswordForm');
+        const decode = await jwt.verify(token, process.env.key);
 
+        if(decode){
+            res.render('../views/partials/changePasswordForm', {token});
+        }else{
+            throw new error('Some woring');
+        }
         
-    } catch (err) {
+    }catch (err) {
         console.log(err);
+        if(err.message == 'jwt expired'){
+            req.flash('error_msg', 'Este token ya ha expirado.');
+            return res.redirect('/auth/forgot_password');
+        }else if(err.message == 'invalid token'){
+            req.flash('error_msg', 'Token no valido.');
+            return res.redirect('/auth/forgot_password');
+        }
         req.flash('error_msg', err.message);
         return res.redirect('/auth/forgot_password');
     }
 };
 
-module.exports = { renderIndexForm, auth, renderForgotPassword, forgotPassword, createNewPassword, logout }
+const createNewPassword = async (req,res) => {
+    const {token,password, confPass} = req.body;
+
+    if(!token){
+        req.flash('error_msg', '¡Falta el token!');
+        return res.redirect('/auth/new_password');
+    }
+
+    if(!password){
+        req.flash('error_msg', 'Contraseña requerida!');
+        return res.redirect('/auth/new_password/'+token);
+    }
+
+    if(!confPass){
+        req.flash('error_msg', 'Confirmar contraseña!');
+        return res.redirect('/auth/new_password/'+token);
+    }
+
+    if(password !== confPass){
+        req.flash('error_msg', 'Las contraseñas no coinciden!');
+        return res.redirect('/auth/new_password/'+token);
+    }
+
+    try {
+        const decode = jwt.verify(token, process.env.key);
+        const salt = await bycrypt.genSalt(10);
+        const passwordHashed = await bycrypt.hash(password, salt);
+        await userShemma.updateOne({_id: decode.id, password: passwordHashed});
+
+        req.flash('success_msg', 'Tus credenciales fueron restablecidas exitosamente!');
+        res.redirect('/auth');
+
+    } catch (error) {
+        console.log(error);
+        req.flash('error_msg', error.message);
+        return res.redirect('/auth/new_password/'+token);
+    }
+
+
+}
+
+module.exports = { renderIndexForm, auth, renderForgotPassword, forgotPassword, renderCreateNewPassword, createNewPassword, logout }

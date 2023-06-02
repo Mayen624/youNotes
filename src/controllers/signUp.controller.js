@@ -13,7 +13,7 @@ const addUser = async (req, res) => {
     const passwordRegexr = /^(?=(.*[\d]){2,})(?=(.*[a-z]){2,})(?=(.*[A-Z]){1,})(?=(.*[@#$%!]){1,})(?:[\da-zA-Z@#$%!.]){8,100}$/;
 
     //Data came from req post
-    const { User, names, age, Email, Password, confirmPass } = req.body;
+    const { User, names, age, Email, phone, Password, confirmPass } = req.body;
 
     //Fields validation
     if (!User || !names || !Email || !Password || !confirmPass) {
@@ -59,12 +59,24 @@ const addUser = async (req, res) => {
         errors.push({ message: 'Correo electronico no valido.' });
     }
 
+    
+    //Phone validations
+    const phoneRepeat = await newUserShemma.find({ phone: phone });
+
+    if(!phone){
+        errors.push({ message: 'Numero de telefono requerido.' });
+    }
+
+    if(phoneRepeat.length > 0){
+        errors.push({ message: 'Numero de telefono ya existente.' });
+    }
+
     //If there's no error the user will be save
     if (errors.length > 0) {
-        res.render('../views/signup', { errors, User, names, Email, Password });
+        res.render('../views/signup', { errors, User, names, Email, phone, Password });
     } else {
 
-        const newUser = new newUserShemma({ user: User, names: names, email: Email, password: Password, enabled: false });
+        const newUser = new newUserShemma({ user: User, names: names, email: Email, phone: phone, password: Password, enabled: false, image: {name: 'User.jpg', orgName: 'User.jpg', size: 7023} });
         newUser.password = await newUser.encryptPassword(Password);
         await newUser.save();
         req.flash('success_msg', 'Usuario creado exitosamente!');

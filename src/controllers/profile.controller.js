@@ -79,8 +79,39 @@ const addSecretKey = async (req, res) => {
     }
 }
 
-const forgotSecretKey = async (req, res) => {
-    
+const renderForgotSecretKey = async (req, res) => {
+    res.render('../views/partials/forgotKeyForm');
 }
 
-module.exports = { profileRender, editProfile, addSecretKey, forgotSecretKey }
+const forgotSecretKey = async (req, res) => {
+   const {phone} = req.body;
+   const userData = req.user;
+
+    if(!phone){
+        req.flash('error_msg', 'Numero de telefono requerido');
+        return res.redirect('/profile/forgotKey');
+    }
+
+    const notFound = await userShemma.findOne({phone: phone});
+    if(!notFound){
+        req.flash('error_msg', 'El numero de telefono ingresado no esta registrado.');
+        return res.redirect('/profile/forgotKey');
+    }
+
+    //close session after send code
+
+}
+
+const renderCreateNewKey = async (req, res) => {
+   
+}
+
+const createNewKey = async (req, res) => {
+    const {code, sKey, confSKey} = req.params;
+}
+
+module.exports = {
+    profileRender, editProfile, addSecretKey, 
+    renderForgotSecretKey, forgotSecretKey,
+    renderCreateNewKey, createNewKey
+}

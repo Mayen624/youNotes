@@ -22,6 +22,7 @@ const auth = passport.authenticate('local', {
 //Close the user's session
 const logout = async (req, res) => {
 
+    //Id del usuario que esta guardado en la sesion
     const userData = req.user;
     const idUser = userData._id;
 
@@ -176,5 +177,7 @@ const createNewPassword = async (req,res) => {
 
 
 }
+
+
 
 module.exports = { renderIndexForm, auth, renderForgotPassword, forgotPassword, renderCreateNewPassword, createNewPassword, logout }

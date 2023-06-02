@@ -10,6 +10,12 @@ router.post('/edit', isAuthenticated, profileController.editProfile);
 
 router.post('/secretKey', isAuthenticated, profileController.addSecretKey);
 
-router.get('/forgotKey', isAuthenticated, profileController.forgotSecretKey);
+router.get('/forgotKey', isAuthenticated, profileController.renderForgotSecretKey);
+
+router.post('/forgotKey', isAuthenticated, profileController.forgotSecretKey);
+
+router.get('/new_secret_Key', isAuthenticated, profileController.renderCreateNewKey);
+
+router.post('/new_secret_Key', isAuthenticated, profileController.createNewKey);
 
 module.exports = router;

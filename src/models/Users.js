@@ -10,6 +10,7 @@ const newUserShemma = new Schema({
     age         : {type: String, default: null},
     key         : {type: String, default: null},
     email       : {type: String, unique: true, require: true},
+    phone       : {type: String, unique: true, require: true},
     password    : {type: String},
     image       : {type: Object, default: null},
     enabled     : {type: Boolean},

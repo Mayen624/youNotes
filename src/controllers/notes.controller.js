@@ -137,8 +137,13 @@ const deleteNotes = async (req, res) => {
     const { id } = req.query
 
     if (id) {
-        await noteshemma.deleteOne({ _id: id });
-        res.json({ warning_msg: 'Nota eleminada.' }).status(200);
+        const note = await noteshemma.findOne({_id: id});
+        if(note.isEncrypted == true){
+            res.json({ warning_msg: 'Debes desencripta primero la nota para eliminarla.'}).status(500);
+        }else{
+            await noteshemma.deleteOne({ _id: id });
+            res.json({ warning_msg: 'Nota eleminada.' }).status(200);
+        }
     } else {
         req.flash('error_msg', 'Ha ocurrido un error indesperad, si el problema persiste intentelo mas tarde.');
         res.redirect('/notes');

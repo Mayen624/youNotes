@@ -57,11 +57,13 @@
               <i style="font-size: 18px;" class="bi bi-sliders"></i>
             </a>
             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+              {{^if this.isEncrypted}}
               <li><a class="dropdown-item" href="/notes/edit/{{this._id}}"><i class="bi bi-pencil-square"></i>
                   Editar</a></li>
               <li>
                 <hr class="dropdown-divider">
               </li>
+              {{/if}}
               <li><button class="dropdown-item" type="button" id="delete-btn" data-id="{{this._id}}"><i
                     class="bi bi-trash-fill"></i> Eliminar
                 </button>

@@ -1,4 +1,3 @@
-
 let btnRemove = document.querySelectorAll('#delete-btn');
 btnRemove.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -13,6 +12,7 @@ btnRemove.forEach(btn => {
             })
             .then(res => res.json())
             .then(data => {
+                alert(data.warning_msg);
                 window.location = '/notes';
             })
         }

@@ -1,9 +1,12 @@
-const { generateHash } = require('../config/bycrypt');
+const { generateHash, compareHash } = require('../config/bycrypt');
+const { transporter } = require('../config/nodemailer');
 const userShemma = require('../models/Users');
 const calculateAge = require('../helpers/calculateAge');
-const { encrypt, decrypt } = require('../config/crypto');
 const { format } = require('date-fns');
+const {enmaskEmail} = require('../helpers/enmaskEmail');
+const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const speakeasy = require('speakeasy');
 dotenv.config()
 
 const profileRender = async (req, res) => {
@@ -84,34 +87,69 @@ const renderForgotSecretKey = async (req, res) => {
 }
 
 const forgotSecretKey = async (req, res) => {
-   const {phone} = req.body;
-   const userData = req.user;
+    const { password } = req.body;
+    const userData = req.user;
 
-    if(!phone){
-        req.flash('error_msg', 'Numero de telefono requerido');
+    if (!password) {
+        req.flash('error_msg', 'Contraseña requerida');
         return res.redirect('/profile/forgotKey');
     }
 
-    const notFound = await userShemma.findOne({phone: phone});
-    if(!notFound){
-        req.flash('error_msg', 'El numero de telefono ingresado no esta registrado.');
+    const user = await userShemma.findOne({ _id: userData._id });
+    const match = await compareHash(password, user.password);
+
+    if (!match) {
+        req.flash('error_msg', 'La contraseña es incorrecta, intentelo de nuevo.');
         return res.redirect('/profile/forgotKey');
     }
 
-    //close session after send code
+    try {
+        // Configura la clave secreta
+        const secret = process.env.OTP_SECRET_KEY; 
+        // Tiempo de vida del codigo OTP
+        const codeValidity = 600;
+        // Genera un código OTP
+        const otpCode = speakeasy.totp({secret, window: codeValidity});
+        // Enmascara el correo del usuario
+        const enmaskedEmail = enmaskEmail(user.email);
+        const token = jwt.sign({id: user._id},  process.env.RESET_SKEY_SECRET, { expiresIn: '600s' });
 
-}
+        await transporter.sendMail({
+            from: '"Forgot secret key - youNotes" <mayen624.dev@gmail.com>', // sender address
+            to: user.email, // list of receivers
+            subject: "youNotes ✔", // Subject line
+            html: `
+                <h1>Español</h1>
+                <b>Aviso:</b>
+                <p>Este es un correo generado outomaticamente, porfavor no responder este correo. Si cree que este correo es un error, favor de eliminarlo.</p>
+                <br>
+                <b>Para cambiar tu llave de seguridad haga click en el siguiente link:</b>
+                <a href="http://localhost:3000/auth/new_secret_Key?token=${token}">Cambia tu contraseña aqui</a>
+                <b>Tu codigo de verificacion:</b>
+                <p>${otpCode}</p>
+                <br>
+                <br>
+                <h1>English</h1>
+                <b>Warning:</b>
+                <p>This is a auto generated email, please don't reply to this email. If you think this email is a error, please delete it.</p>
+                <br>
+                <b>To change you security key make click in the following link:</b>
+                <a href="http://localhost:3000/auth/new_secret_Key?token=${token}">Change your password here</a>
+                <b>Your verification code:</b>
+                <p>${otpCode}</p>
+            `
+        });
 
-const renderCreateNewKey = async (req, res) => {
-   
-}
+        req.flash('success_msg', 'Tu codigo codigo de verificacion fue enviado a tu correo: ' + enmaskedEmail);
+        return res.redirect('/profile/forgotKey');
+    } catch (e) {
+        console.log(e);
+    }
 
-const createNewKey = async (req, res) => {
-    const {code, sKey, confSKey} = req.params;
+
 }
 
 module.exports = {
-    profileRender, editProfile, addSecretKey, 
+    profileRender, editProfile, addSecretKey,
     renderForgotSecretKey, forgotSecretKey,
-    renderCreateNewKey, createNewKey
 }

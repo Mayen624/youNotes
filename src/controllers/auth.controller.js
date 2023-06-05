@@ -2,11 +2,13 @@ const passport = require('passport');
 const noteshemma = require('../models/Notes');
 const userShemma = require('../models/Users');
 const { encrypt, decrypt } = require('../config/crypto');
+const { generateHash, compareHash } = require('../config/bycrypt');
 const { transporter } = require('../config/nodemailer');
 const dotenv = require('dotenv');
 const bycrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-dotenv.config()
+const speakeasy = require('speakeasy');
+dotenv.config();
 
 const renderIndexForm = async (req, res) => {
     res.render('../views/index');
@@ -126,7 +128,7 @@ const renderCreateNewPassword = async (req, res) => {
     }catch (err) {
         console.log(err);
         if(err.message == 'jwt expired'){
-            req.flash('error_msg', 'Este token ya ha expirado.');
+            req.flash('error_msg', 'Token expirado.');
             return res.redirect('/auth/forgot_password');
         }else if(err.message == 'invalid token'){
             req.flash('error_msg', 'Token no valido.');
@@ -178,6 +180,57 @@ const createNewPassword = async (req,res) => {
 
 }
 
+const renderCreateNewKey = async (req, res) => {
+    const token = req.token;
+    res.render('../views/partials/changeSKey', {token});
+}
+
+const createNewKey = async (req, res) => {
+    const {token, code, sKey, confSKey } = req.body;
+
+    if(!token){
+        req.flash('error_msg', 'Algo ha salido mal, intentalo de nuevo mas tarde.');
+        return res.redirect('/auth');
+    }
+
+    if(!code || !sKey || !confSKey){
+        req.flash('error_msg', 'Algo ha salido mal, intentalo de nuevo mas tarde.');
+        return res.redirect('/auth/new_secret_Key?token=' + token);
+    }
+
+    if(sKey !== confSKey){
+        req.flash('error_msg', 'Las llaves no coinciden!.');
+        return res.redirect('/auth/new_secret_Key?token=' + token);
+    }
+
+    const secret = process.env.OTP_SECRET_KEY
+    const isValid =  speakeasy.totp.verify({secret, encoding: 'ascii', token: code,});
+
+    try {
+
+        if(isValid){
+            const decode = jwt.verify(token, process.env.key);
+            await userShemma.updateOne({_id: decode.id, key: generateHash(sKey)});
+    
+            req.flash('success_msg', 'Tu llave de seguridad fue restablecida exitosamente!');
+            return res.redirect('/auth');
+        }else{
+            req.flash('error_msg', 'Codigo de verificacion no valido!.');
+            return res.redirect('/auth/new_secret_Key?token=' + token);
+        }
+        
+    } catch (e) {
+        req.flash('error_msg', e.message);
+        return res.redirect('/auth');
+    }
+    
+}
 
 
-module.exports = { renderIndexForm, auth, renderForgotPassword, forgotPassword, renderCreateNewPassword, createNewPassword, logout }
+
+module.exports = 
+    { 
+        renderIndexForm, auth, renderForgotPassword, 
+        forgotPassword, renderCreateNewPassword,renderCreateNewKey, 
+        createNewKey,createNewPassword, logout 
+    }

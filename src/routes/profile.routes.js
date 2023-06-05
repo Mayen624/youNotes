@@ -14,8 +14,4 @@ router.get('/forgotKey', isAuthenticated, profileController.renderForgotSecretKe
 
 router.post('/forgotKey', isAuthenticated, profileController.forgotSecretKey);
 
-router.get('/new_secret_Key', isAuthenticated, profileController.renderCreateNewKey);
-
-router.post('/new_secret_Key', isAuthenticated, profileController.createNewKey);
-
 module.exports = router;

@@ -16,4 +16,5 @@ transporter.verify().then(() => {
     console.log('Redy for send emails');
 })
 
+
 module.exports = {transporter};

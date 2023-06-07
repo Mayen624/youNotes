@@ -194,7 +194,7 @@ const createNewKey = async (req, res) => {
     }
 
     if(!code || !sKey || !confSKey){
-        req.flash('error_msg', 'Algo ha salido mal, intentalo de nuevo mas tarde.');
+        req.flash('error_msg', 'Todos los campos son requeridos.');
         return res.redirect('/auth/new_secret_Key?token=' + token);
     }
 
@@ -203,17 +203,21 @@ const createNewKey = async (req, res) => {
         return res.redirect('/auth/new_secret_Key?token=' + token);
     }
 
-    const secret = process.env.OTP_SECRET_KEY
-    const isValid =  speakeasy.totp.verify({secret, encoding: 'ascii', token: code,});
-
     try {
 
-        if(isValid){
-            const decode = jwt.verify(token, process.env.key);
-            await userShemma.updateOne({_id: decode.id, key: generateHash(sKey)});
+        const decode = jwt.verify(token, process.env.RESET_SKEY_SECRET);
+        const user = await userShemma.findOne({_id: decode.id});
+
+        if(user.code === code){
+            
+            const newKey = await generateHash(sKey);
+            await userShemma.updateOne({_id: decode.id, key: newKey});
     
-            req.flash('success_msg', 'Tu llave de seguridad fue restablecida exitosamente!');
-            return res.redirect('/auth');
+            req.logout((err) => {
+                if (err) { return next(err); }
+                req.flash('success_msg', 'Tu llave de seguridad fue restablecida exitosamente!');
+                return res.redirect("/auth");
+            });
         }else{
             req.flash('error_msg', 'Codigo de verificacion no valido!.');
             return res.redirect('/auth/new_secret_Key?token=' + token);

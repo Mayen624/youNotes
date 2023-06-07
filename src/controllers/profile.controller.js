@@ -113,6 +113,7 @@ const forgotSecretKey = async (req, res) => {
         // Enmascara el correo del usuario
         const enmaskedEmail = enmaskEmail(user.email);
         const token = jwt.sign({id: user._id},  process.env.RESET_SKEY_SECRET, { expiresIn: '600s' });
+        await userShemma.updateOne({_id: user._id, code: otpCode});
 
         await transporter.sendMail({
             from: '"Forgot secret key - youNotes" <mayen624.dev@gmail.com>', // sender address

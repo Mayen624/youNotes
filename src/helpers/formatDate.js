@@ -12,7 +12,7 @@ function calculateDayPassed(date) {
     const timeDiff = currentDate.getTime() - pastDate.getTime();
     const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
 
-    if (daysDiff >= 30) {
+    if (daysDiff >= 10) {
         return true;
     } else {
         return false;

@@ -1,5 +1,6 @@
 const newUserShemma = require('../models/Users');
 const calculateAge = require('../helpers/calculateAge');
+const {formatDate, calculateDayPassed} = require('../helpers/formatDate');
 
 const signupRenderForm = async (req, res) => {
     res.render('../views/signup');
@@ -75,8 +76,19 @@ const addUser = async (req, res) => {
     if (errors.length > 0) {
         res.render('../views/signup', { errors, User, names, Email, phone, Password });
     } else {
-
-        const newUser = new newUserShemma({ user: User, names: names, email: Email, phone: phone, password: Password, enabled: false, image: {name: 'User.jpg', orgName: 'User.jpg', size: 7023} });
+        const newUserData = { 
+            user: User, 
+            names: names, 
+            email: Email, 
+            phone: phone, 
+            password: Password, 
+            image: {
+                name: 'User.jpg', orgName: 'User.jpg', size: 7023
+            },
+            enabled: false, 
+            createdAt: formatDate(new Date()),
+        }
+        const newUser = new newUserShemma(newUserData);
         newUser.password = await newUser.encryptPassword(Password);
         await newUser.save();
         req.flash('success_msg', 'Usuario creado exitosamente!');

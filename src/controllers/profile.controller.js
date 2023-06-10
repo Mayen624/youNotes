@@ -2,7 +2,6 @@ const { generateHash, compareHash } = require('../config/bycrypt');
 const { transporter } = require('../config/nodemailer');
 const userShemma = require('../models/Users');
 const calculateAge = require('../helpers/calculateAge');
-const { format } = require('date-fns');
 const {formatDate, calculateDayPassed} = require('../helpers/formatDate');
 const { enmaskEmail } = require('../helpers/enmaskEmail');
 const jwt = require('jsonwebtoken');
@@ -12,7 +11,7 @@ dotenv.config()
 
 const profileRender = async (req, res) => {
     const userInfo = req.user; //All the data about user.
-    res.render('../views/layouts/profile', { layout: 'profile.hbs', userName: userInfo.user, userInfo, dateJoin: format(userInfo.createdAt, 'dd/MM/yyyy'), })
+    res.render('../views/layouts/profile', { layout: 'profile.hbs', userName: userInfo.user, userInfo, dateJoin: userInfo.createdAt })
 }
 
 const editProfile = async (req, res) => {
@@ -24,52 +23,50 @@ const editProfile = async (req, res) => {
     const formattedAge = calculateAge(age);
     const daysPassed = calculateDayPassed(userData.updatedAt);
 
-    console.log(userData.updatedAt)
+    if (!id || !names || !work || !sex || !age) {
+        req.flash('error_msg', 'Todos los campos son requeridos.');
+        return res.redirect('/profile');
+    }
 
+    if(!daysPassed){
+        req.flash('error_msg', 'Puedes volver a actualizar tus datos dentro 10 dias.');
+        return res.redirect('/profile');
+    }
 
-    // if (!id || !names || !work || !sex || !age) {
-    //     req.flash('error_msg', 'Todos los campos son requeridos.');
-    //     return res.redirect('/profile');
-    // }
+    if (formattedAge <= 8) {
+        req.flash('error_msg', 'Debes ser mayor a 8 años.');
+        return res.redirect('/profile');
+    }
 
-    // if(!daysPassed){
-    //     req.flash('error_msg', 'Puedes volver a actualizar tus datos dentro 30 dias.');
-    //     return res.redirect('/profile');
-    // }
+    if (names === userData.names && work === userData.work && sex === userData.sex && formattedAge == userData.age) {
+        req.flash('error_msg', 'Los datos no pueden ser los mismos.');
+        return res.redirect('/profile');
+    }
 
-    // if (formattedAge <= 8) {
-    //     req.flash('error_msg', 'Debes ser mayor a 8 años.');
-    //     return res.redirect('/profile');
-    // }
+    try {
+        if (req.uploadError) {
+            req.flash('error_msg', req.uploadError.message);
+            return res.redirect('/profile');
+        } else {
+            await userShemma.findByIdAndUpdate(
+                id,
+                {
+                    names: names, work: work, sex: sex, age: formattedAge,
+                    image: {
+                        name: req.file == undefined || null ? 'User.jpg' : req.file.filename,
+                        orgName: req.file == undefined || null ? 'User.jpg' : req.file.originalname,
+                        size: req.file == undefined || null ? 7023 : req.file.size
+                    },
+                    updatedAt: formatDate(new Date())
+                }
 
-    // if (names === userData.names && work === userData.work && sex === userData.sex && formattedAge == userData.age) {
-    //     req.flash('error_msg', 'Los datos no pueden ser los mismos.');
-    //     return res.redirect('/profile');
-    // }
-
-    // try {
-    //     if (req.uploadError) {
-    //         req.flash('error_msg', req.uploadError.message);
-    //         return res.redirect('/profile');
-    //     } else {
-    //         await userShemma.findByIdAndUpdate(
-    //             id,
-    //             {
-    //                 names: names, work: work, sex: sex, age: formattedAge,
-    //                 image: {
-    //                     name: req.file == undefined || null ? 'User.jpg' : req.file.filename,
-    //                     orgName: req.file == undefined || null ? 'User.jpg' : req.file.originalname,
-    //                     size: req.file == undefined || null ? 7023 : req.file.size
-    //                 }
-    //             }
-
-    //         );
-    //         req.flash('success_msg', 'Tus datos han sido actualizados.');
-    //         return res.redirect('/profile');
-    //     }
-    // } catch (e) {
-    //     console.log(e)
-    // }
+            );
+            req.flash('success_msg', 'Tus datos han sido actualizados.');
+            return res.redirect('/profile');
+        }
+    } catch (e) {
+        console.log(e)
+    }
 
 }
 

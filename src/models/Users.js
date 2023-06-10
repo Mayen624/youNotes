@@ -15,10 +15,9 @@ const newUserShemma = new Schema({
     image       : {type: Object, default: null},
     enabled     : {type: Boolean},
     code        : {type: String, default: null},
-    reset_token : {type: String, default: null}
-
-}, {
-    timestamps: true
+    reset_token : {type: String, default: null},
+    updatedAt   : {type: String, default: null},
+    createdAt   : {type: String}
 });
 
 

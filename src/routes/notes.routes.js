@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const main = require('../controllers/mainController');
 const notesController = main.mainController.notesController;
-const { isAuthenticated } = require('../helpers/sessionAuth');
+const { isAuthenticated } = require('../middlewares/sessionAuth');
 const router = Router();
 
 router.get('/', isAuthenticated, notesController.notesRender);

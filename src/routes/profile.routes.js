@@ -1,7 +1,7 @@
 const {Router} = require('express');
 const main = require('../controllers/mainController');
 const profileController = main.mainController.profileControler;
-const {isAuthenticated} = require('../helpers/sessionAuth');
+const {isAuthenticated} = require('../middlewares/sessionAuth');
 const router = Router();
 
 router.get('/', isAuthenticated,profileController.profileRender);

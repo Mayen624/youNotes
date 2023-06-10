@@ -5,7 +5,7 @@ const isAuthenticated = async (req, res, next) => {
     }
 
     req.flash("warning_msg" , "Se requiere inicio de sesion." );
-    res.redirect('/auth');
+    res.redirect('/');
 }
 
 module.exports = {isAuthenticated};

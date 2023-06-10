@@ -83,7 +83,7 @@ app.use(multer({
 }).single('img'));
 
 //Static files
-app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
+app.use('/css', express.static(__dirname + '/src/public/css/bootstrap.min.css'));
 app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js'));
 app.use('/bi', express.static(__dirname + '/node_modules/bootstrap-icons'));
 app.use('/images', express.static(__dirname + '/src/public/images'));
@@ -97,9 +97,8 @@ const staticRoutes = require('./src/routes/static.routes');
 const noteRoutes = require('./src/routes/notes.routes');
 const profileRoutes = require('./src/routes/profile.routes');
 
-//Using routes
-//app.use('/', mainRoute); 
-app.use('/auth', indexRoutes);
+//Using routes 
+app.use('/', indexRoutes);
 app.use('/about', staticRoutes);
 app.use('/signup', signUpRoutes);
 app.use('/notes', noteRoutes);

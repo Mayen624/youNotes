@@ -15,7 +15,7 @@ const renderIndexForm = async (req, res) => {
 }
 
 const auth = passport.authenticate('local', {
-    failureRedirect: '/auth',
+    failureRedirect: '/',
     successRedirect: '/notes',
     badRequestMessage: 'Correo o contraseña incorrectos.',
     failureFlash: true
@@ -46,7 +46,7 @@ const logout = async (req, res) => {
     req.logout((err) => {
         if (err) { return next(err); }
         req.flash("success_msg", "Sesión cerrada.");
-        res.redirect("/auth");
+        res.redirect("/");
     });
 
 }
@@ -61,14 +61,14 @@ const forgotPassword = async (req, res) => {
 
     if (!email) {
         req.flash('error_msg', 'Correo electronico requerido.');
-        return res.redirect('/auth/forgot_password');
+        return res.redirect('/forgot_password');
     }
 
     const userInfo = await userShemma.findOne({ email: email });
 
     if (!userInfo) {
         req.flash('error_msg', 'Este correo no esta registrado.');
-        return res.redirect('/auth/forgot_password');
+        return res.redirect('/forgot_password');
     }
 
     try {
@@ -87,7 +87,7 @@ const forgotPassword = async (req, res) => {
                 <p>Este es un correo generado outomaticamente, porfavor no responder este correo. Si cree que este correo es un error, favor de eliminarlo.</p>
                 <br>
                 <b>Para cambiar tu contraseña haga click en el siguiente link:</b>
-                <a href="http://localhost:3000/auth/new_password/${token}">Cambia tu contraseña aqui</a>
+                <a href="http://localhost:3000/new_password/${token}">Cambia tu contraseña aqui</a>
                 <br>
                 <br>
                 <h1>English</h1>
@@ -95,12 +95,12 @@ const forgotPassword = async (req, res) => {
                 <p>This is a auto generated email, please don't reply to this email. If you think this email is a error, please delete it.</p>
                 <br>
                 <b>To change you password make click in the following link:</b>
-                <a href="http://localhost:3000/auth/new_password/${token}">Change your password here</a>
+                <a href="http://localhost:3000/new_password/${token}">Change your password here</a>
             `
         });
 
         req.flash('success_msg', 'Revisa tu correo electronico, es posible que el correo este en la seccion de spam, trash o unwanted.');
-        return res.redirect('/auth/forgot_password');
+        return res.redirect('/forgot_password');
     } catch (e) {
         console.log(e)
     }
@@ -112,7 +112,7 @@ const renderCreateNewPassword = async (req, res) => {
 
     if (!token) {
         req.flash('error_msg', '¡Falta el token!');
-        return res.redirect('/auth/forgot_password');
+        return res.redirect('/forgot_password');
     }
 
     try {
@@ -129,13 +129,13 @@ const renderCreateNewPassword = async (req, res) => {
         console.log(err);
         if(err.message == 'jwt expired'){
             req.flash('error_msg', 'Token expirado.');
-            return res.redirect('/auth/forgot_password');
+            return res.redirect('/forgot_password');
         }else if(err.message == 'invalid token'){
             req.flash('error_msg', 'Token no valido.');
-            return res.redirect('/auth/forgot_password');
+            return res.redirect('/forgot_password');
         }
         req.flash('error_msg', err.message);
-        return res.redirect('/auth/forgot_password');
+        return res.redirect('/forgot_password');
     }
 };
 
@@ -144,22 +144,22 @@ const createNewPassword = async (req,res) => {
 
     if(!token){
         req.flash('error_msg', '¡Falta el token!');
-        return res.redirect('/auth/new_password');
+        return res.redirect('/new_password');
     }
 
     if(!password){
         req.flash('error_msg', 'Contraseña requerida!');
-        return res.redirect('/auth/new_password/'+token);
+        return res.redirect('/new_password/'+token);
     }
 
     if(!confPass){
         req.flash('error_msg', 'Confirmar contraseña!');
-        return res.redirect('/auth/new_password/'+token);
+        return res.redirect('/new_password/'+token);
     }
 
     if(password !== confPass){
         req.flash('error_msg', 'Las contraseñas no coinciden!');
-        return res.redirect('/auth/new_password/'+token);
+        return res.redirect('/new_password/'+token);
     }
 
     try {
@@ -169,12 +169,12 @@ const createNewPassword = async (req,res) => {
         await userShemma.updateOne({_id: decode.id, password: passwordHashed});
 
         req.flash('success_msg', 'Tus credenciales fueron restablecidas exitosamente!');
-        res.redirect('/auth');
+        res.redirect('/');
 
     } catch (error) {
         console.log(error);
         req.flash('error_msg', error.message);
-        return res.redirect('/auth/new_password/'+token);
+        return res.redirect('/new_password/'+token);
     }
 
 
@@ -190,17 +190,17 @@ const createNewKey = async (req, res) => {
 
     if(!token){
         req.flash('error_msg', 'Algo ha salido mal, intentalo de nuevo mas tarde.');
-        return res.redirect('/auth');
+        return res.redirect('/');
     }
 
     if(!code || !sKey || !confSKey){
         req.flash('error_msg', 'Todos los campos son requeridos.');
-        return res.redirect('/auth/new_secret_Key?token=' + token);
+        return res.redirect('/new_secret_Key?token=' + token);
     }
 
     if(sKey !== confSKey){
         req.flash('error_msg', 'Las llaves no coinciden!.');
-        return res.redirect('/auth/new_secret_Key?token=' + token);
+        return res.redirect('/new_secret_Key?token=' + token);
     }
 
     try {
@@ -216,16 +216,16 @@ const createNewKey = async (req, res) => {
             req.logout((err) => {
                 if (err) { return next(err); }
                 req.flash('success_msg', 'Tu llave de seguridad fue restablecida exitosamente!');
-                return res.redirect("/auth");
+                return res.redirect("/");
             });
         }else{
             req.flash('error_msg', 'Codigo de verificacion no valido!.');
-            return res.redirect('/auth/new_secret_Key?token=' + token);
+            return res.redirect('/new_secret_Key?token=' + token);
         }
         
     } catch (e) {
         req.flash('error_msg', e.message);
-        return res.redirect('/auth');
+        return res.redirect('/');
     }
     
 }

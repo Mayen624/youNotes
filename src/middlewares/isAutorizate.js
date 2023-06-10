@@ -6,7 +6,7 @@ const validateToken = async(req,res,next) => {
 
     if(!token){
         req.flash('error_msg', 'Token requerido!');
-        return res.redirect('/auth');
+        return res.redirect('/');
     }
 
     try {
@@ -16,13 +16,13 @@ const validateToken = async(req,res,next) => {
     } catch (e) {
         if(e.message == 'jwt expired'){
             req.flash('error_msg', 'Token expirado.');
-            return res.redirect('/auth');
+            return res.redirect('/');
         }else if(e.message == 'invalid token'){
             req.flash('error_msg', 'Token no valido.');
-            return res.redirect('/auth');
+            return res.redirect('/');
         }
         req.flash('error_msg', e.message);
-        return res.redirect('/auth');
+        return res.redirect('/');
     }
 }
 

@@ -87,7 +87,7 @@ const forgotPassword = async (req, res) => {
                 <p>Este es un correo generado outomaticamente, porfavor no responder este correo. Si cree que este correo es un error, favor de eliminarlo.</p>
                 <br>
                 <b>Para cambiar tu contraseña haga click en el siguiente link:</b>
-                <a href="http://localhost:3000/new_password/${token}">Cambia tu contraseña aqui</a>
+                <a href="http://${process.env.DOMAIN}/new_password/${token}">Cambia tu contraseña aqui</a>
                 <br>
                 <br>
                 <h1>English</h1>
@@ -95,7 +95,7 @@ const forgotPassword = async (req, res) => {
                 <p>This is a auto generated email, please don't reply to this email. If you think this email is a error, please delete it.</p>
                 <br>
                 <b>To change you password make click in the following link:</b>
-                <a href="http://localhost:3000/new_password/${token}">Change your password here</a>
+                <a href="http://${process.env.DOMAIN}/new_password/${token}">Change your password here</a>
             `
         });
 

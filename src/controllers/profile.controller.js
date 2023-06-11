@@ -137,7 +137,7 @@ const forgotSecretKey = async (req, res) => {
                 <p>Este es un correo generado outomaticamente, porfavor no responder este correo. Si cree que este correo es un error, favor de eliminarlo.</p>
                 <br>
                 <b>Para cambiar tu llave de seguridad haga click en el siguiente link:</b>
-                <a href="http://localhost:3000/new_secret_Key?token=${token}">Cambia tu contraseña aqui</a>
+                <a href="https://${process.env.DOMAIN}/new_secret_Key?token=${token}">Cambia tu contraseña aqui</a>
                 <b>Tu codigo de verificacion:</b>
                 <p>${otpCode}</p>
                 <br>
@@ -147,7 +147,7 @@ const forgotSecretKey = async (req, res) => {
                 <p>This is a auto generated email, please don't reply to this email. If you think this email is a error, please delete it.</p>
                 <br>
                 <b>To change you security key make click in the following link:</b>
-                <a href="http://localhost:3000/new_secret_Key?token=${token}">Change your password here</a>
+                <a href="https://${process.env.DOMAIN}/new_secret_Key?token=${token}">Change your password here</a>
                 <b>Your verification code:</b>
                 <p>${otpCode}</p>
             `

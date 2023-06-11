@@ -3,7 +3,8 @@ const { transporter } = require('../config/nodemailer');
 const userShemma = require('../models/Users');
 const calculateAge = require('../helpers/calculateAge');
 const { format } = require('date-fns');
-const {enmaskEmail} = require('../helpers/enmaskEmail');
+const {formatDate, calculateDayPassed} = require('../helpers/formatDate');
+const { enmaskEmail } = require('../helpers/enmaskEmail');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const speakeasy = require('speakeasy');
@@ -21,45 +22,54 @@ const editProfile = async (req, res) => {
     const userData = req.user;
     const { id, names, work, sex, age } = req.body;
     const formattedAge = calculateAge(age);
+    const daysPassed = calculateDayPassed(userData.updatedAt);
 
-    if (!id || !names || !work || !sex || !age) {
-        req.flash('error_msg', 'Todos los campos son requeridos.');
-        return res.redirect('/profile');
-    }
+    console.log(userData.updatedAt)
 
-    if (formattedAge <= 8) {
-        req.flash('error_msg', 'Debes ser mayor a 8 años.');
-        return res.redirect('/profile');
-    }
 
-    if (names === userData.names && work === userData.work && sex === userData.sex && formattedAge == userData.age) {
-        req.flash('error_msg', 'Los datos no pueden ser los mismos.');
-        return res.redirect('/profile');
-    }
+    // if (!id || !names || !work || !sex || !age) {
+    //     req.flash('error_msg', 'Todos los campos son requeridos.');
+    //     return res.redirect('/profile');
+    // }
 
-    try {
-        if (req.uploadError) {
-            req.flash('error_msg', req.uploadError.message);
-            return res.redirect('/profile');
-        } else {
-            await userShemma.findByIdAndUpdate(
-                id,
-                {
-                    names: names, work: work, sex: sex, age: formattedAge,
-                    image: {
-                        name: req.file == undefined || null ? 'User.jpg' : req.file.filename,
-                        orgName: req.file == undefined || null ? 'User.jpg' : req.file.originalname,
-                        size: req.file == undefined || null ? 7023 : req.file.size
-                    }
-                }
+    // if(!daysPassed){
+    //     req.flash('error_msg', 'Puedes volver a actualizar tus datos dentro 30 dias.');
+    //     return res.redirect('/profile');
+    // }
 
-            );
-            req.flash('success_msg', 'Tus datos han sido actualizados.');
-            return res.redirect('/profile');
-        }
-    } catch (e) {
-        console.log(e)
-    }
+    // if (formattedAge <= 8) {
+    //     req.flash('error_msg', 'Debes ser mayor a 8 años.');
+    //     return res.redirect('/profile');
+    // }
+
+    // if (names === userData.names && work === userData.work && sex === userData.sex && formattedAge == userData.age) {
+    //     req.flash('error_msg', 'Los datos no pueden ser los mismos.');
+    //     return res.redirect('/profile');
+    // }
+
+    // try {
+    //     if (req.uploadError) {
+    //         req.flash('error_msg', req.uploadError.message);
+    //         return res.redirect('/profile');
+    //     } else {
+    //         await userShemma.findByIdAndUpdate(
+    //             id,
+    //             {
+    //                 names: names, work: work, sex: sex, age: formattedAge,
+    //                 image: {
+    //                     name: req.file == undefined || null ? 'User.jpg' : req.file.filename,
+    //                     orgName: req.file == undefined || null ? 'User.jpg' : req.file.originalname,
+    //                     size: req.file == undefined || null ? 7023 : req.file.size
+    //                 }
+    //             }
+
+    //         );
+    //         req.flash('success_msg', 'Tus datos han sido actualizados.');
+    //         return res.redirect('/profile');
+    //     }
+    // } catch (e) {
+    //     console.log(e)
+    // }
 
 }
 
@@ -67,17 +77,22 @@ const addSecretKey = async (req, res) => {
     const { sKey } = req.body;
     const userData = req.user;
 
-    if (!sKey) {
-        req.flash('error_msg', 'Llave requrida!, tu llave te ayudara a proteger tus notas mas importantes y poder crear notas de categoria recordatorio.');
-        res.redirect('/profile');
+    if (userData.key != null) {
+        req.flash('error_msg', 'Tu llave ya fue creada, puedes restablecer en caso de haberla olvidado');
+        return res.redirect('/profile');
     } else {
-        try {
-            const hashedKey = await generateHash(sKey);
-            await userShemma.findByIdAndUpdate(userData._id, { key: hashedKey });
-            req.flash('success_msg', 'Tu llave fue existosamente creada, ahora puedes crear notas de categoria "credenciales".');
+        if (!sKey) {
+            req.flash('error_msg', 'Llave requrida!, tu llave te ayudara a proteger tus notas mas importantes y poder crear notas de categoria recordatorio.');
             res.redirect('/profile');
-        } catch (e) {
-            return console.log(e)
+        } else {
+            try {
+                const hashedKey = await generateHash(sKey);
+                await userShemma.findByIdAndUpdate(userData._id, { key: hashedKey });
+                req.flash('success_msg', 'Tu llave fue existosamente creada, ahora puedes crear notas de categoria "credenciales".');
+                return res.redirect('/profile');
+            } catch (e) {
+                return console.log(e)
+            }
         }
     }
 }
@@ -105,15 +120,15 @@ const forgotSecretKey = async (req, res) => {
 
     try {
         // Configura la clave secreta
-        const secret = process.env.OTP_SECRET_KEY; 
+        const secret = process.env.OTP_SECRET_KEY;
         // Tiempo de vida del codigo OTP
         const codeValidity = 600;
         // Genera un código OTP
-        const otpCode = speakeasy.totp({secret, window: codeValidity});
+        const otpCode = speakeasy.totp({ secret, window: codeValidity });
         // Enmascara el correo del usuario
         const enmaskedEmail = enmaskEmail(user.email);
-        const token = jwt.sign({id: user._id},  process.env.RESET_SKEY_SECRET, { expiresIn: '600s' });
-        await userShemma.updateOne({_id: user._id, code: otpCode});
+        const token = jwt.sign({ id: user._id }, process.env.RESET_SKEY_SECRET, { expiresIn: '600s' });
+        await userShemma.updateOne({ _id: user._id, code: otpCode });
 
         await transporter.sendMail({
             from: '"Forgot secret key - youNotes" <mayen624.dev@gmail.com>', // sender address

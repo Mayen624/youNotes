@@ -117,7 +117,7 @@ const renderCreateNewPassword = async (req, res) => {
 
     try {
 
-        const decode = await jwt.verify(token, process.env.RESET_PSW_SECRET);
+        const decode = await jwt.verify(token, process.env.KEY);
 
         if(decode){
             res.render('../views/partials/changePasswordForm', {token});
